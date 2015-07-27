@@ -1,0 +1,50 @@
+/* Convert a bmp 8 bit image to tiff */
+bmp2tif.exe
+
+/* Apply a boolean operation between 2 files: and, xor, or, nor, nand, not */
+boolean.exe
+
+/* Creates an empty tiff or bmp file of size l*ROWS , w*COLS */
+create.exe
+
+/* Dumps the image number values to an ascii text */
+dumpi.exe
+
+/* Main calling routine for geometric subroutines: displacement, rotation, stretching, cross product */
+geometry.exe
+
+/* Grey tones depending on a threshold value */
+halftone.exe
+
+/* Write a block text inside an image (labeling)*/
+ilabel.exe
+
+/* Inverts an image*/
+invert.exe
+
+/* Addition and substraction between 2 files */
+mainas.exe
+
+/* Cuts a piece of an image and paste it to another image file */
+maincp.exe
+
+/* overlay an image on other */
+mainover.exe
+
+/* rounds off an image (cut it ) and coopy it to a new file */
+round.exe
+
+/* shows the image numbers on the screen (similar with dumpi) */
+showi.exe
+
+/* takes 2 images and puts them together (side by side) */
+side.exe
+
+/* hide/uncover one image to/from another image - steganography*/
+stega.exe
+
+/* stretch an image */
+stretch.exe
+
+/* convert tiff to bmp */
+tif2bmp.exe
