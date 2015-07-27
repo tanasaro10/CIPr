@@ -1,7 +1,7 @@
 
    /***********************************************
    *
-   *   file mainas.c
+   *   file halftone.c
    *
    *   Functions: This file contains
    *      main
@@ -11,18 +11,6 @@
    *      routine in an image addition and subtraction
    *      program.
    *
-   *   External Calls:
-   *      imageio.c - create_image_file
-   *                  read_image_array
-   *                  write_image_array
-   *                  get_image_size
-   *                  get_bitsperpixel
-   *                  allocate_image_array
-   *                  free_image_array
-   *                  does_not_exist
-   *                  are_not_same_size
-   *      baddsub.c - add_image_array
-   *                  subtract_image_array
    *
    *   Modifications:
    *      1 April 1992 - created
@@ -30,7 +18,9 @@
    *         images at one time.
    *     18 September 1998 - modified to work with 
    *           all I O routines in imageio.c.
-   *
+   *	   Modified Date: 27 Iuly 2015 
+	 *		 Author: Mihu Andrei Cristian
+   *		 Scoala de vara Thales
    *************************************************/
 
 #include "cips.h"
