@@ -1,344 +1,261 @@
-#include "imageio.h"
+/******************************************************************************
+*   imageio.h
+*       
+*   Purpose:
+*     To declare the subrutines that read and write tiff and bmp image files.
+*
+*   External calls:
+*     None
+*
+*   Modifications:
+*     23 June 1990 - created
+*     28 March 1993 - using fopen, fread, fseek instead of my_open, 
+*           my_read, lseek.
+*     25 June 1990 - created
+*     27 March 1993 - use fopen, fread, fseek instead of the earlier 
+*           open, read, seek, etc.
+*     21 April 1998 - modified to work with an entire image at one time.
+*     18 September 1998 - imagio.c was created by combining tiff.c 
+*           brwtiff.c and functions written for bmp file io
+*     27 July 2015 - refactored
+*           Iulian-Razvan Matesica, Scoala de Vara - Thales - 2015  
+*
+******************************************************************************/
 
-int main()
-{
+#ifndef IMAGEIO_H
+#define IMAGEIO_H
 
-  return 0;
-}
+#include "cips.h"
+#include "mtypes.h"
 
-void read_tiff_header(char_t file_name[], tiff_header_struct *image_header)
-{
-  FILE *image_file = NULL;
+/******************************************************************************
+*
+*   read_tiff_header(...
+*
+*   This function reads the header of a TIFF file and places the needed 
+*   information into the struct tiff_header_struct.
+*
+******************************************************************************/
+void read_tiff_header(char_t file_name[], tiff_header_struct *image_header);
 
-  char_t  buffer[12] = {0};
-
-  int16_t not_finished = 0, lsb = 0;
-
-  int32_t bits_per_pixel = 0, 
-          offset_to_ifd = 0, 
-          strip_offset = 0, 
-          image_length = 0, 
-          image_width = 0, 
-          subfile = 0;
-
-  uint16_t  length_of_field = 0,
-            s_bits_per_pixel = 0,
-            s_strip_offset = 0,
-            s_image_length = 0,
-            s_image_width = 0,
-            entry_count = 0,
-            field_type = 0,
-            tag_type = 0;
-
-  image_file = fopen(file_name, "rb");
-  if(image_file == NULL) {
-    printf("\n\nTIFF.C> ERROR - could not open tiff file");
-  } else {
-    // Determine if the file uses MSB first or LSB first
-    fread((char_t*)buffer, 1, 8, image_file);
-
-    if(buffer[0] == 0x49) {
-      lsb = 1;
-    } else {
-      lsb = 0;
-    }
-
-    // Read the offset to the IFD
-    extract_long_from_buffer(buffer, lsb, 4, &offset_to_ifd);
-    not_finished = 1;
-
-    while(not_finished) 
-    {
-      // Seek to the IFD and read the entry_count, 
-      // i.e. the number of entries in the IFD.
-      fseek(image_file, offset_to_ifd, SEEK_SET);
-      fread((char_t*)buffer, 1, 2, image_file);
-      extract_ushort_from_buffer(buffer, lsb, 0, &entry_count);
-
-      // Now loop over the directory entries.
-      // Look only for the tags we need.  
-      // These are:
-      //    - ImageLength
-      //    - ImageWidth
-      //    - BitsPerPixel(BitsPerSample)
-      //    - StripOffset
-
-      for(uint16_t i = 0; i < entry_count; i++) {
-        fread((char_t*)buffer, 1, 12, image_file);
-        extract_ushort_from_buffer(buffer, lsb, 0, &tag_type);
-
-        switch(tag_type) {
-          // Subfile Type
-          case 255u: {
-            extract_ushort_from_buffer(buffer, lsb, 2, &field_type);
-            extract_ushort_from_buffer(buffer, lsb, 4, &length_of_field);
-            extract_long_from_buffer(buffer, lsb, 8, &subfile);
-
-            break;
-          }
-
-          // ImageWidth 
-          case 256u: {
-            extract_ushort_from_buffer(buffer, lsb, 2, &field_type);
-            extract_ushort_from_buffer(buffer, lsb, 4, &length_of_field);
-             
-            if(field_type == 3u) {
-              extract_ushort_from_buffer(buffer, lsb, 8, &s_image_width);
-              image_width = s_image_width;
-            } else {
-              extract_long_from_buffer(buffer, lsb, 8, &image_width);
-            }
-
-            break;
-          }
-
-          // ImageLength
-          case 257u: {
-            extract_ushort_from_buffer(buffer, lsb, 2, &field_type);
-            extract_ushort_from_buffer(buffer, lsb, 4, &length_of_field);
-             
-            if(field_type == 3u) {
-              extract_ushort_from_buffer(buffer, lsb, 8, &s_image_length);
-              image_length = s_image_length;
-            }
-            else {
-              extract_long_from_buffer(buffer, lsb, 8, &image_length);
-            }
-
-            break;
-          }
-
-          // BitsPerSample
-          case 258u: {
-            extract_ushort_from_buffer(buffer, lsb, 2, &field_type);
-            extract_ushort_from_buffer(buffer, lsb, 4, &length_of_field);
-             
-            if(field_type == 3) {
-              extract_ushort_from_buffer(buffer, lsb, 8, &s_bits_per_pixel);
-              bits_per_pixel = s_bits_per_pixel;
-            }
-            else {
-              extract_long_from_buffer(buffer, lsb, 8, &bits_per_pixel);
-            }
-
-            break;
-          }
-
-          // StripOffset
-          case 273u: {
-            extract_ushort_from_buffer(buffer, lsb, 2, &field_type);
-            extract_ushort_from_buffer(buffer, lsb, 4, &length_of_field);
-            
-            if(field_type == 3u) {
-              extract_ushort_from_buffer(buffer, lsb, 8, &s_strip_offset);
-              strip_offset = s_strip_offset;
-            }
-            else {
-              extract_long_from_buffer(buffer, lsb, 8, &strip_offset);
-            }
-            
-            break;
-          }
-
-          default: {
-            break;
-          }
-        }
-      }
-
-      fread(buffer, 1, 4, image_file);
-      extract_long_from_buffer(buffer, lsb, 0, &offset_to_ifd);
-      
-      if(offset_to_ifd == 0) 
-        not_finished = 0;
-    }
-
-    image_header->lsb             = lsb;
-    image_header->bits_per_pixel  = bits_per_pixel;
-    image_header->image_length    = image_length;
-    image_header->image_width     = image_width;
-    image_header->strip_offset    = strip_offset;
-
-    fclose(image_file);
-  } 
-}
-
+/******************************************************************************
+*
+*   extract_long_from_buffer(...
+*
+*   This takes a four byte long out of a buffer of characters.
+*   It is important to know the byte order LSB or MSB.
+*
+******************************************************************************/
 void extract_long_from_buffer(char_t buffer[], 
                               int16_t lsb, 
                               int16_t start, 
-                              int32_t *number)
-{
-  long_char_union lcu;
+                              int32_t *number);
 
-  if(lsb == 1) {
-    lcu.l_alpha[0] = buffer[start+0];
-    lcu.l_alpha[1] = buffer[start+1];
-    lcu.l_alpha[2] = buffer[start+2];
-    lcu.l_alpha[3] = buffer[start+3];
-  } else if(lsb == 0) {
-    lcu.l_alpha[0] = buffer[start+3];
-    lcu.l_alpha[1] = buffer[start+2];
-    lcu.l_alpha[2] = buffer[start+1];
-    lcu.l_alpha[3] = buffer[start+0];
-  }
-
-  *number = lcu.l_num;
-}
-
+/******************************************************************************
+*
+*   extract_ulong_from_buffer(...
+*
+*   This takes a four byte unsigned long out of a buffer of characters.
+*   It is important to know the byte order LSB or MSB.
+*
+******************************************************************************/
 void extract_ulong_from_buffer(char_t buffer[], 
                                 int16_t lsb, 
                                 int16_t start, 
-                                uint32_t *number)
-{
-  ulong_char_union lcu;
+                                uint32_t *number);
 
-  if(lsb == 1) {
-    lcu.l_alpha[0] = buffer[start+0];
-    lcu.l_alpha[1] = buffer[start+1];
-    lcu.l_alpha[2] = buffer[start+2];
-    lcu.l_alpha[3] = buffer[start+3];
-  } else if(lsb == 0) {
-    lcu.l_alpha[0] = buffer[start+3];
-    lcu.l_alpha[1] = buffer[start+2];
-    lcu.l_alpha[2] = buffer[start+1];
-    lcu.l_alpha[3] = buffer[start+0];
-  }
-
-  *number = lcu.l_num;
-}
-
+/******************************************************************************
+*
+*   extract_short_from_buffer(...
+*
+*   This takes a two byte short out of a buffer of characters.
+*   It is important to know the byte order LSB or MSB.
+*
+******************************************************************************/
 void extract_short_from_buffer(char_t buffer[],
                                 int16_t lsb,
                                 int16_t start,
-                                int16_t *number)
-{
-  short_char_union lcu;
+                                int16_t *number);
 
-  if(lsb == 1) {
-    lcu.s_alpha[0] = buffer[start+0];
-    lcu.s_alpha[1] = buffer[start+1];
-  } else if(lsb == 0) {
-    lcu.s_alpha[0] = buffer[start+1];
-    lcu.s_alpha[1] = buffer[start+0];
-  }
-
-  *number = lcu.s_num;
-}
-
+/******************************************************************************
+*
+*   extract_ushort_from_buffer(...
+*
+*   This takes a two byte unsiged short out of a buffer of characters.
+*   It is important to know the byte order LSB or MSB.
+*
+******************************************************************************/
 void extract_ushort_from_buffer(char_t buffer[],
                                 int16_t lsb,
                                 int16_t start,
-                                uint16_t *number)
-{
-  ushort_char_union lcu;
+                                uint16_t *number);
 
-  if(lsb == 1) {
-    lcu.s_alpha[0] = buffer[start+0];
-    lcu.s_alpha[1] = buffer[start+1];
-  } else if(lsb == 0) {
-    lcu.s_alpha[0] = buffer[start+1];
-    lcu.s_alpha[1] = buffer[start+0];
-  }
+/******************************************************************************
+*
+*   allocate_image_array(...
+*
+*   This function allocates memory for a two-dimensional image array.
+*
+******************************************************************************/
+int16_t **allocate_image_array(int32_t length, int32_t width);
 
-  *number = lcu.s_num;
-}
+/******************************************************************************
+*
+*   free_image_array(...
+*
+*   This function frees up the memory used by a two-dimensional imaage array.
+*
+******************************************************************************/
+int16_t free_image_array(int16_t **the_array, int32_t length);
 
-int16_t **allocate_image_array(int32_t length, int32_t width)
-{
-  int16_t **the_array = malloc(length * sizeof(int16_t*));
+/******************************************************************************
+*
+*   read_tiff_image(...
+*
+*   This function reads the image data from a tiff image file.  
+*   It only works for 8-bit gray scale images.
+*
+******************************************************************************/
+void read_tiff_image(char_t image_file_name, int16_t **the_image);
 
-  for(int i = 0; i < length; i++) {
-    the_array[i] = malloc(width * sizeof(int16_t));
-
-    if(the_array[i] == '\0') {
-       printf("\n\tmalloc of the_image[%d] failed", i);
-    }
-  }
-
-  return the_array; 
-}
-
-int16_t free_image_array(int16_t **the_array, int32_t length)
-{
-
-}
-
-void read_tiff_image(char_t image_file_name, int16_t **the_image)
-{
-
-}
-
+/******************************************************************************
+*
+*   read_line(...
+*
+*   This function reads bytes from the TIFF file into a buffer, extracts the 
+*   numbers from that buffer, and puts them into a ROWSxCOLS array of shorts.
+*   The process depends on the number of bits per pixel used in the file 
+*   (4 or 8).
+*
+******************************************************************************/
 void read_line(FILE *image_file, 
                 int16_t **the_image,
                 int16_t line_number,
                 tiff_header_struct *image_header,
                 int16_t ie,
-                int16_t le)
-{
+                int16_t le);
 
-}
-
+/******************************************************************************
+*
+*   seek_to_first_line(...
+*
+*   This function seeks past the header information in a tiff image file to 
+*   the first line of image data.
+*
+******************************************************************************/
 void seek_to_first_line(FILE *image_file,
                         tiff_header_struct *image_header,
-                        int16_t il)
-{
+                        int16_t il);
 
-}
-
+/******************************************************************************
+*
+*   seek_to_end_of_line(...
+*
+*   This function seeks to the end of the current line in a tiff image.
+*
+******************************************************************************/
 void seek_to_end_of_line(FILE *image_file,
                           int16_t le,
-                          tiff_header_struct *image_header)
-{
+                          tiff_header_struct *image_header);
 
-}
-
+/******************************************************************************
+*
+*   create_tiff_file_if_needed(...
+*
+*   This function seeks to the end of the current line in a tiff image.
+*
+******************************************************************************/
 void create_tiff_file_if_needed(char_t in_name[],
                                 char_t out_name[],
-                                int16_t **out_image)
-{
+                                int16_t **out_image);
 
-}
-
+/******************************************************************************
+*
+*   create_alllocate_tiff_file(...
+*
+*   This function creates a file on disk that will be large enough to hold a 
+*   tiff image.  The input tiff_header_struct describes the desired tiff file.
+*   This function writes the tiff header and then writes a blank image array
+*   out to disk the proper number of times.  This has the effect of allocating
+*   the correct number of bytes on the disk. There will be 18 entries in 
+*   the IFD.
+*
+*   The image data will begin at byte 296.
+*   I will use LSB first data.
+*   I will have one strip for the entire image.
+*   Black is zero.
+*   The component values for the image are CHUNKY (Planer configuration = 1).
+*
+******************************************************************************/
 void create_allocate_tiff_file(char_t file_name[], 
-                                tiff_header_struct *image_header)
-{
+                                tiff_header_struct *image_header);
 
-}
+/******************************************************************************
+*
+*   write_tiff_image(...
+*
+*   This function takes an array of shorts and writes them into an 
+*   existing tiff image file.
+*
+******************************************************************************/
+void write_tiff_image(char_t image_file_name[], int16_t **array);
 
-void write_tiff_image(char_t image_file_name[], int16_t **array)
-{
-
-}
-
+/******************************************************************************
+*
+*   write_line(...
+*
+*   This function takes an array of shorts, extracts the numbers and puts them 
+*   into a buffer, then writes this buffer into a tiff file on disk. 
+*   The process depends on the number of bits per pixel used in the file 
+*   (4 or 8).
+*
+******************************************************************************/
 void write_line(FILE *image_file,
                 int16_t **array,
                 int16_t line_number,
                 tiff_header_struct *image_header,
                 int16_t ie,
-                int16_t le)
-{
+                int16_t le);
 
-}
+/******************************************************************************
+*
+*   insert_short_into_buffer(...
+*
+*   This inserts a two byte short into a buffer of characters.  
+*   It does this in LSB order.
+*
+******************************************************************************/
+void insert_short_into_buffer(char_t buffer[], int16_t start, int16_t number);
 
-void insert_short_into_buffer(char_t buffer[], int16_t start, int16_t number)
-{
+/******************************************************************************
+*
+*   insert_ushort_into_buffer(...
+*
+*   This inserts a two byte unsigned short into a buffer of characters.  
+*   It does this in LSB order.
+*
+******************************************************************************/
+void insert_ushort_into_buffer(char_t buffer[], int16_t start, uint16_t number);
 
-}
+/******************************************************************************
+*
+*   insert_long_into_buffer(...
+*
+*   This inserts a four byte long into a buffer of characters. 
+*   It does this in LSB order.
+*
+******************************************************************************/
+void insert_long_into_buffer(char_t buffer[], int16_t start, int32_t number);
 
-void insert_ushort_into_buffer(char_t buffer[], int16_t start, uint16_t number)
-{
-
-}
-
-void insert_long_into_buffer(char_t buffer[], int16_t start, int32_t number)
-{
-
-}
-
-void insert_ulong_into_buffer(char_t buffer[], int16_t start, uint32_t number)
-{
-
-}
+/******************************************************************************
+*
+*   insert_ulong_into_buffer(...
+*
+*   This inserts a four byte unsigned long into a buffer of characters. 
+*   It does this in LSB order.
+*
+******************************************************************************/
+void insert_ulong_into_buffer(char_t buffer[], int16_t start, uint32_t number);
 
 /******************************************************************************
 *
@@ -629,3 +546,5 @@ void create_resized_image_file(char_t in_name[],
                                 char_t out_name[],
                                 int32_t length,
                                 int32_t width);
+
+#endif
