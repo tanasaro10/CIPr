@@ -24,13 +24,15 @@
     *          3 March 1993 - created
     *         22 August 1998 - modified to work on 
     *              entire images at once.
+    *         27 July 2015 - refactored
+    *           Alexandra Bodirlau, Scoala de Vara - Thales - 2015
     *
     ***********************************************/
 
 
 #include "cips.h"
-
-
+#include "mtypes.h"
+#include "boole.h"
 
    /************************************************
    *
@@ -43,25 +45,23 @@
    *
    *************************************************/
 
-and_image(the_image, out_image,
-          rows, cols)
-   short  **the_image,
-          **out_image;
-   long   cols, rows;
-{
-   int    i, j;
+void and_image(int16_t **the_image, int16_t **out_image,
+          int32_t rows, int32_t cols) {
+  int32_t  i, j;
 
-   for(i=0; i<rows; i++){
-      if( (i%10) == 0) printf(" %d", i);
-      for(j=0; j<cols; j++){
-         if( the_image[i][j] != 0   &&
-             out_image[i][j] != 0)
-             out_image[i][j] = the_image[i][j];
-         else
-             out_image[i][j] = 0;
-      }  /* ends loop over j */
-   }  /* ends loop over i */
-
+  for (i = 0; i < rows; i++) {
+    if ((i % 10) == 0) {
+      printf(" %d", i);
+    }
+    for (j = 0; j < cols; j++) {
+      if ((the_image[i][j] != 0) && (out_image[i][j] != 0)) {
+        out_image[i][j] = the_image[i][j];
+      }
+      else {
+        out_image[i][j] = 0;
+      }
+    }  /* ends loop over j */
+  }  /* ends loop over i */
 } /* ends and_image */
 
 
@@ -82,28 +82,28 @@ and_image(the_image, out_image,
    *
    *************************************************/
 
-or_image(the_image, out_image,
-         rows, cols)
-   short **the_image,
-         **out_image;
-   long  cols, rows;
-{
-   int    i, j;
+void or_image(int16_t **the_image, int16_t **out_image,
+         int32_t rows, int32_t cols) {
+  int32_t  i, j;
 
-   for(i=0; i<rows; i++){
-      if ( (i%10) == 0) printf(" %d", i);
-      for(j=0; j<cols; j++){
-         if( the_image[i][j] != 0   ||
-             out_image[i][j] != 0){
-             if(the_image[i][j] != 0)
-                out_image[i][j] = the_image[i][j];
-             else
-                out_image[i][j] = out_image[i][j];
-         }
-         else
-             out_image[i][j] = 0;
-      }  /* ends loop over j */
-   }  /* ends loop over i */
+  for (i = 0; i < rows; i++) {
+    if ((i%10) == 0) {
+      printf(" %d", i);
+    }
+    for (j = 0; j < cols; j++) {
+      if ((the_image[i][j] != 0) || (out_image[i][j] != 0)) {
+        if (the_image[i][j] != 0) {
+          out_image[i][j] = the_image[i][j];
+        }
+        else {
+          out_image[i][j] = out_image[i][j];
+        }
+      }
+      else {
+        out_image[i][j] = 0;
+      }
+    }  /* ends loop over j */
+  }  /* ends loop over i */
 
 } /* ends or_image */
 
@@ -125,33 +125,31 @@ or_image(the_image, out_image,
    *
    *************************************************/
 
-xor_image(the_image, out_image,
-          rows, cols)
-   short  **the_image,
-          **out_image;
-   long  cols, rows;
-{
-   int    i, j;
-   short  answer;
+void xor_image(int16_t **the_image, int16_t **out_image,
+         int32_t rows, int32_t cols) {
+  int32_t  i, j;
+  int16_t  answer;
 
-   for(i=0; i<rows; i++){
-      if ( (i%10) == 0) printf(" %d", i);
-      for(j=0; j<cols; j++){
-         if( (the_image[i][j] != 0 &&
-              out_image[i][j] == 0))
-             answer = the_image[i][j];
-         if( (the_image[i][j] == 0 &&
-              out_image[i][j] != 0))
-             answer = out_image[i][j];
-         if( (the_image[i][j] == 0 &&
-              out_image[i][j] == 0))
-             answer = 0;
-         if( (the_image[i][j] != 0 &&
-              out_image[i][j] != 0))
-             answer = 0;
-         out_image[i][j] = answer;
-      }  /* ends loop over j */
-   }  /* ends loop over i */
+  for (i = 0; i < rows; i++) {
+    if ((i%10) == 0) {
+      printf(" %d", i);
+    }
+    for (j = 0; j < cols; j++) {
+      if ((the_image[i][j] != 0) && (out_image[i][j] == 0)) {
+        answer = the_image[i][j];
+      }
+      if ((the_image[i][j] == 0) && (out_image[i][j] != 0)) {
+        answer = out_image[i][j];
+      }
+      if ((the_image[i][j] == 0) && (out_image[i][j] == 0)) {
+        answer = 0;
+      }
+      if ((the_image[i][j] != 0) && (out_image[i][j] != 0)) {
+        answer = 0;
+      }
+      out_image[i][j] = answer;
+    }  /* ends loop over j */
+  }  /* ends loop over i */
 
 } /* ends xor_image */
 
@@ -171,25 +169,23 @@ xor_image(the_image, out_image,
    *
    ************************************************/
 
-nand_image(the_image, out_image,
-           value, rows, cols)
-   short   **the_image,
-           **out_image, value;
-   long  cols, rows;
-{
-   int    i, j;
+void nand_image(int16_t **the_image, int16_t **out_image,
+         int32_t rows, int32_t cols, int16_t value) {
+  int32_t  i, j;
 
-   for(i=0; i<rows; i++){
-      if ( (i%10) == 0) printf(" %d", i);
-      for(j=0; j<cols; j++){
-         if( the_image[i][j] != 0   &&
-             out_image[i][j] != 0)
-             out_image[i][j] = 0;
-         else
-             out_image[i][j] = value;
-      }  /* ends loop over j */
-   }  /* ends loop over i */
-
+  for (i = 0; i < rows; i++) {
+    if ((i%10) == 0) {
+      printf(" %d", i);
+    }
+    for (j = 0; j < cols; j++) {
+      if ((the_image[i][j] != 0) && (out_image[i][j] != 0)) {
+        out_image[i][j] = 0;
+      }
+      else {
+        out_image[i][j] = value;
+      }
+    }  /* ends loop over j */
+  }  /* ends loop over i */
 } /* ends nand_image */
 
 
@@ -210,24 +206,23 @@ nand_image(the_image, out_image,
    *
    ************************************************/
 
-nor_image(the_image, out_image,
-          value, rows, cols)
-   short  **the_image,
-          **out_image, value;
-   long  cols, rows;
-{
-   int    i, j;
+void nor_image(int16_t **the_image, int16_t **out_image,
+         int32_t rows, int32_t cols, int16_t value) {
+  int32_t  i, j;
 
-   for(i=0; i<rows; i++){
-      if ( (i%10) == 0) printf(" %d", i);
-      for(j=0; j<cols; j++){
-         if( the_image[i][j] == 0   &&
-             out_image[i][j] == 0)
-             out_image[i][j] = value;
-         else
-             out_image[i][j] = 0;
-      }  /* ends loop over j */
-   }  /* ends loop over i */
+  for (i = 0; i < rows; i++){
+    if ((i % 10) == 0) {
+      printf(" %d", i);
+    }
+    for (j = 0; j < cols; j++){
+      if ((the_image[i][j] == 0) && (out_image[i][j] == 0)) {
+        out_image[i][j] = value;
+      }
+      else {
+        out_image[i][j] = 0;
+      }
+    }  /* ends loop over j */
+  }  /* ends loop over i */
 
 } /* ends nor_image */
 
@@ -247,26 +242,26 @@ nor_image(the_image, out_image,
    *
    ************************************************/
 
-not_image(the_image, out_image,
-          value, rows, cols)
-   short  **the_image,
-          **out_image,
-          value;
-   long  cols, rows;
-{
-   int    i, j;
+void not_image(int16_t **the_image, int16_t **out_image,
+         int32_t rows, int32_t cols, int16_t value) {
+  int32_t  i, j;
 
-   for(i=0; i<rows; i++)
-      for(j=0; j<cols; j++)
-         out_image[i][j] = value;
+  for (i = 0; i < rows; i++) {
+    for(j = 0; j < cols; j++) {
+      out_image[i][j] = value;
+    }
+  }
 
-   for(i=0; i<rows; i++){
-      if ( (i%10) == 0) printf(" %d", i);
-      for(j=0; j<cols; j++){
-         if(the_image[i][j] == value)
-             out_image[i][j] = 0;
-      }  /* ends loop over j */
-   }  /* ends loop over i */
+  for (i = 0; i < rows; i++) {
+    if ((i % 10) == 0) {
+      printf(" %d", i);
+    }
+    for (j = 0; j < cols; j++) {
+      if (the_image[i][j] == value) {
+        out_image[i][j] = 0;
+      }
+    }  /* ends loop over j */
+  }  /* ends loop over i */
 
 } /* ends not_image */
 
