@@ -1,7 +1,7 @@
 LIB      = -lm
-CC       = gcc
-COMPILE  = gcc -c -std=gnu99 -g
-LINK     = gcc -o
+CC       = gcc -std=gnu99
+COMPILE  = gcc -c -std=gnu99 -g -Wall
+LINK     = gcc -o 
 
 imageio.o: imageio.c
 	${COMPILE} imageio.c -I.

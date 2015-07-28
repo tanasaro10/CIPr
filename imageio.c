@@ -238,10 +238,10 @@ void extract_ushort_from_buffer(char_t buffer[],
 
 sint16_t **allocate_image_array(sint32_t length, sint32_t width)
 {
-  int16_t **the_array = malloc(length * sizeof(int16_t*));
+  sint16_t **the_array = malloc(length * sizeof(sint16_t*));
 
   for(sint32_t i = 0; i < length; i++) {
-    the_array[i] = malloc(width * sizeof(int16_t));
+    the_array[i] = malloc(width * sizeof(sint16_t));
 
     if(the_array[i] == '\0') {
       printf("\n\tmalloc of the_image[%d] failed", i);
