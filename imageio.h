@@ -47,9 +47,9 @@ void read_tiff_header(char_t file_name[], tiff_header_struct *image_header);
 *
 ******************************************************************************/
 void extract_long_from_buffer(char_t buffer[], 
-                              int16_t lsb, 
-                              int16_t start, 
-                              int32_t *number);
+                              sint16_t lsb, 
+                              sint16_t start, 
+                              sint32_t *number);
 
 /******************************************************************************
 *
@@ -60,8 +60,8 @@ void extract_long_from_buffer(char_t buffer[],
 *
 ******************************************************************************/
 void extract_ulong_from_buffer(char_t buffer[], 
-                                int16_t lsb, 
-                                int16_t start, 
+                                sint16_t lsb, 
+                                sint16_t start, 
                                 uint32_t *number);
 
 /******************************************************************************
@@ -73,9 +73,9 @@ void extract_ulong_from_buffer(char_t buffer[],
 *
 ******************************************************************************/
 void extract_short_from_buffer(char_t buffer[],
-                                int16_t lsb,
-                                int16_t start,
-                                int16_t *number);
+                                sint16_t lsb,
+                                sint16_t start,
+                                sint16_t *number);
 
 /******************************************************************************
 *
@@ -86,8 +86,8 @@ void extract_short_from_buffer(char_t buffer[],
 *
 ******************************************************************************/
 void extract_ushort_from_buffer(char_t buffer[],
-                                int16_t lsb,
-                                int16_t start,
+                                sint16_t lsb,
+                                sint16_t start,
                                 uint16_t *number);
 
 /******************************************************************************
@@ -97,7 +97,7 @@ void extract_ushort_from_buffer(char_t buffer[],
 *   This function allocates memory for a two-dimensional image array.
 *
 ******************************************************************************/
-int16_t **allocate_image_array(int32_t length, int32_t width);
+sint16_t **allocate_image_array(sint32_t length, sint32_t width);
 
 /******************************************************************************
 *
@@ -106,7 +106,7 @@ int16_t **allocate_image_array(int32_t length, int32_t width);
 *   This function frees up the memory used by a two-dimensional imaage array.
 *
 ******************************************************************************/
-int16_t free_image_array(int16_t **the_array, int32_t length);
+sint16_t free_image_array(sint16_t **the_array, sint32_t length);
 
 /******************************************************************************
 *
@@ -116,7 +116,7 @@ int16_t free_image_array(int16_t **the_array, int32_t length);
 *   It only works for 8-bit gray scale images.
 *
 ******************************************************************************/
-void read_tiff_image(char_t image_file_name, int16_t **the_image);
+void read_tiff_image(char_t image_file_name[], sint16_t **the_image);
 
 /******************************************************************************
 *
@@ -128,12 +128,12 @@ void read_tiff_image(char_t image_file_name, int16_t **the_image);
 *   (4 or 8).
 *
 ******************************************************************************/
-void read_line(FILE *image_file, 
-                int16_t **the_image,
-                int16_t line_number,
-                tiff_header_struct *image_header,
-                int16_t ie,
-                int16_t le);
+sint16_t read_line(FILE *image_file, 
+                  sint16_t **the_image,
+                  sint16_t line_number,
+                  tiff_header_struct *image_header,
+                  sint16_t ie,
+                  sint16_t le);
 
 /******************************************************************************
 *
@@ -143,9 +143,9 @@ void read_line(FILE *image_file,
 *   the first line of image data.
 *
 ******************************************************************************/
-void seek_to_first_line(FILE *image_file,
-                        tiff_header_struct *image_header,
-                        int16_t il);
+sint16_t seek_to_first_line(FILE *image_file,
+                            tiff_header_struct *image_header,
+                            sint16_t il);
 
 /******************************************************************************
 *
@@ -154,9 +154,9 @@ void seek_to_first_line(FILE *image_file,
 *   This function seeks to the end of the current line in a tiff image.
 *
 ******************************************************************************/
-void seek_to_end_of_line(FILE *image_file,
-                          int16_t le,
-                          tiff_header_struct *image_header);
+sint16_t seek_to_end_of_line(FILE *image_file,
+                            sint16_t le,
+                            tiff_header_struct *image_header);
 
 /******************************************************************************
 *
@@ -167,7 +167,7 @@ void seek_to_end_of_line(FILE *image_file,
 ******************************************************************************/
 void create_tiff_file_if_needed(char_t in_name[],
                                 char_t out_name[],
-                                int16_t **out_image);
+                                sint16_t **out_image);
 
 /******************************************************************************
 *
@@ -198,7 +198,7 @@ void create_allocate_tiff_file(char_t file_name[],
 *   existing tiff image file.
 *
 ******************************************************************************/
-void write_tiff_image(char_t image_file_name[], int16_t **array);
+void write_tiff_image(char_t image_file_name[], sint16_t **array);
 
 /******************************************************************************
 *
@@ -210,12 +210,12 @@ void write_tiff_image(char_t image_file_name[], int16_t **array);
 *   (4 or 8).
 *
 ******************************************************************************/
-void write_line(FILE *image_file,
-                int16_t **array,
-                int16_t line_number,
-                tiff_header_struct *image_header,
-                int16_t ie,
-                int16_t le);
+sint16_t write_line(FILE *image_file,
+                    sint16_t **array,
+                    sint16_t line_number,
+                    tiff_header_struct *image_header,
+                    sint16_t ie,
+                    sint16_t le);
 
 /******************************************************************************
 *
@@ -225,7 +225,7 @@ void write_line(FILE *image_file,
 *   It does this in LSB order.
 *
 ******************************************************************************/
-void insert_short_into_buffer(char_t buffer[], int16_t start, int16_t number);
+void insert_short_into_buffer(char_t buffer[], sint16_t start, sint16_t number);
 
 /******************************************************************************
 *
@@ -235,7 +235,7 @@ void insert_short_into_buffer(char_t buffer[], int16_t start, int16_t number);
 *   It does this in LSB order.
 *
 ******************************************************************************/
-void insert_ushort_into_buffer(char_t buffer[], int16_t start, uint16_t number);
+void insert_ushort_into_buffer(char_t buffer[], sint16_t start, uint16_t number);
 
 /******************************************************************************
 *
@@ -245,7 +245,7 @@ void insert_ushort_into_buffer(char_t buffer[], int16_t start, uint16_t number);
 *   It does this in LSB order.
 *
 ******************************************************************************/
-void insert_long_into_buffer(char_t buffer[], int16_t start, int32_t number);
+void insert_long_into_buffer(char_t buffer[], sint16_t start, sint32_t number);
 
 /******************************************************************************
 *
@@ -255,7 +255,7 @@ void insert_long_into_buffer(char_t buffer[], int16_t start, int32_t number);
 *   It does this in LSB order.
 *
 ******************************************************************************/
-void insert_ulong_into_buffer(char_t buffer[], int16_t start, uint32_t number);
+void insert_ulong_into_buffer(char_t buffer[], sint16_t start, uint32_t number);
 
 /******************************************************************************
 *
@@ -267,8 +267,8 @@ void insert_ulong_into_buffer(char_t buffer[], int16_t start, uint32_t number);
 *
 ******************************************************************************/
 void round_off_image_size(tiff_header_struct *image_header,
-                          int16_t length, 
-                          int16_t width);
+                          sint16_t *length, 
+                          sint16_t *width);
 
 /******************************************************************************
 *
@@ -328,7 +328,7 @@ void print_bm_header(bitmapheader *bmheader);
 *   This function reads the color table from a bmp image file.
 *
 ******************************************************************************/
-void read_color_table(char_t file_name[], ctstruct *rgb, int16_t size);
+void read_color_table(char_t file_name[], ctstruct rgb[], int16_t size);
 
 /******************************************************************************
 *
@@ -399,7 +399,7 @@ void write_bmp_image(char_t file_name[], int16_t **array);
 *   pixels in a bmp image.
 *
 ******************************************************************************/
-int16_t calculate_pad(int32_t width);
+int32_t calculate_pad(int32_t width);
 
 /******************************************************************************
 *
