@@ -26,27 +26,26 @@
     *            entire images at once.
     *       19 September 1998 - modified to work with 
     *           all I O routines in imageio.c.
+    *       28 July 2015 - refactored
+    *           Alexandra Bodirlau, Scoala de Vara - Thales - 2015
     *
     ********************************************/
 
 #include "cips.h"
+#include "geometry.h"
+#include "imageio.h"
+#include "mtypes.h"
+#include "geosubs.h"
 
+int main(int32_t argc, char_t *argv[]) {
 
-short **the_image;
-short **out_image;
-
-main(argc, argv)
-   int argc;
-   char *argv[];
-{
-
-   char   name1[80], name2[80], type[80];
-   float  theta, x_stretch, y_stretch,
-          x_cross, y_cross;
-   int    bilinear;
-   int    x_control, y_control;
-   long   length, width;
-   short  m, n, x_displace, y_displace;
+  char_t           name1[FILE_NAME_LENGTH], name2[FILE_NAME_LENGTH], 
+                   type[FILE_NAME_LENGTH];
+  int32_t          length, width;
+  int16_t          **the_image, **out_image;
+  errors           error_flag = NO_ERROR;
+  geometry_options image_geometry;
+  rotate_options   image_rotate; 
 
       /*************************************
       *
@@ -60,7 +59,7 @@ main(argc, argv)
       *
       *************************************/
 
-   if(argc < 7){
+  if (argc < PARAM_NUMBER) {
     printf("\n\nNot enough parameters:");
     printf("\n");
     printf("\n   Two Operations: ");
@@ -75,9 +74,8 @@ main(argc, argv)
     printf("\n   geometry in out rotate angle m n");
     printf(" bilinear (1 or 0)");
     printf("\n");
-    exit(0);
-   }
-
+    error_flag = WRONG_NUMBER_OF_PARAMETERS;
+  }
 
       /*************************************
       *
@@ -85,71 +83,71 @@ main(argc, argv)
       *   depending on the type of call.
       *
       *************************************/
-
-   if(strncmp(argv[3], "geometry", 3) == 0){
+  else {
+    if (strncmp(argv[3], "geometry", 3) == 0) {
       strcpy(name1,  argv[1]);
       strcpy(name2, argv[2]);
       strcpy(type,  argv[3]);
-      theta      = atof(argv[4]);
-      x_displace = atoi(argv[5]);
-      y_displace = atoi(argv[6]);
-      x_stretch  = atof(argv[7]);
-      y_stretch  = atof(argv[8]);
-      x_cross    = atof(argv[9]);
-      y_cross    = atof(argv[10]);
-      bilinear   = atoi(argv[11]);
-   }
+      image_geometry.x_angle    = atof(argv[4]);
+      image_geometry.x_displace = atoi(argv[5]);
+      image_geometry.y_displace = atoi(argv[6]);
+      image_geometry.x_stretch  = atof(argv[7]);
+      image_geometry.y_stretch  = atof(argv[8]);
+      image_geometry.x_cross    = atof(argv[9]);
+      image_geometry.y_cross    = atof(argv[10]);
+      image_geometry.bilinear   = atoi(argv[11]);
+    }
 
-   if(strncmp(argv[3], "rotate", 3) == 0){
+    if (strncmp(argv[3], "rotate", 3) == 0) {
       strcpy(name1,  argv[1]);
       strcpy(name2, argv[2]);
       strcpy(type,  argv[3]);
-      theta    = atof(argv[4]);
-      m        = atoi(argv[5]);
-      n        = atoi(argv[6]);
-      bilinear = atoi(argv[7]);
-   }
+      image_rotate.angle    = atof(argv[4]);
+      image_rotate.m        = atoi(argv[5]);
+      image_rotate.n        = atoi(argv[6]);
+      image_rotate.bilinear = atoi(argv[7]);
+    }
 
-   if(does_not_exist(name1)){
-    printf("\nERROR input file %s does not exist",
-             name1);
-    exit(0);
-   }
+    if (does_not_exist(name1)) {
+      printf("\nERROR input file %s does not exist", name1);
+      error_flag = IN_FILE_DOES_NOT_EXIST;
+    }
 
-   get_image_size(name1, &length, &width);
-   the_image = allocate_image_array(length, width);
-   out_image = allocate_image_array(length, width);
-   create_image_file(name1, name2);
-   read_image_array(name1, the_image);
+    if (error_flag == NO_ERROR) {
+      if (get_image_size(name1, &length, &width) != 1) {
+        error_flag = GET_IMAGE_SIZE_ERROR;
+      }
 
-      /*************************************
-      *
-      *   Call the routines
-      *
-      *************************************/
+      the_image = allocate_image_array(length, width);
+      out_image = allocate_image_array(length, width);
+      if ((the_image == NULL) || (out_image == NULL)) {
+        error_flag = ALLOCATE_IMAGE_ARRAY_ERROR;
+      }
 
-   if(strncmp(type, "geometry", 3) == 0){
-     geometry(the_image, out_image,
-             theta, x_stretch, y_stretch,
-             x_displace, y_displace,
-             x_cross, y_cross,
-             bilinear,
-             length,
-             width);
-   }  /* ends if */
+      if (error_flag == NO_ERROR) {
+        create_image_file(name1, name2);
+        read_image_array(name1, the_image);
 
+        /*************************************
+        *
+        *   Call the routines
+        *
+        *************************************/
 
+        if (strncmp(type, "geometry", 3) == 0) {
+          printf("Here %d %d\n", length, width);
+          geometry(the_image, out_image, image_geometry, length, width);
+        }  /* ends if */
 
-   if(strncmp(type, "rotate", 3) == 0){
-     arotate(the_image, out_image,
-            theta, m, n, bilinear,
-            length,
-            width);
-   }  /* ends if */
+        if (strncmp(type, "rotate", 3) == 0) {
+          arotate(the_image, out_image, image_rotate, length, width);
+        }  /* ends if */
 
-
-   write_image_array(name2, out_image);
-   free_image_array(out_image, length);
-   free_image_array(the_image, length);
-
+        write_image_array(name2, out_image);
+        free_image_array(out_image, length);
+        free_image_array(the_image, length);
+      }
+    }
+  }
+  return 0;
 }  /* ends main  */
