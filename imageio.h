@@ -328,7 +328,7 @@ void print_bm_header(bitmapheader *bmheader);
 *   This function reads the color table from a bmp image file.
 *
 ******************************************************************************/
-void read_color_table(char_t file_name[], ctstruct rgb[], int16_t size);
+void read_color_table(char_t file_name[], ctstruct rgb[], sint16_t size);
 
 /******************************************************************************
 *
@@ -337,7 +337,7 @@ void read_color_table(char_t file_name[], ctstruct rgb[], int16_t size);
 *   This function prints the color table from a bmp file.
 *
 ******************************************************************************/
-void print_color_table(ctstruct *rgb, int16_t size);
+void print_color_table(ctstruct *rgb, sint16_t size);
 
 /******************************************************************************
 *
@@ -346,7 +346,7 @@ void print_color_table(ctstruct *rgb, int16_t size);
 *   This function flips an image array about its horizontal mid-point.
 *
 ******************************************************************************/
-void flip_image_array(int16_t **the_image, int32_t cols, int32_t rows);
+void flip_image_array(sint16_t **the_image, int32_t cols, int32_t rows);
 
 /******************************************************************************
 *
@@ -356,7 +356,7 @@ void flip_image_array(int16_t **the_image, int32_t cols, int32_t rows);
 *   It only works for 8-bit images.
 *
 ******************************************************************************/
-void read_bmp_image(char_t file_name[], int16_t **array);
+void read_bmp_image(char_t file_name[], sint16_t **array);
 
 /******************************************************************************
 *
@@ -380,7 +380,7 @@ void create_allocate_bmp_file(char_t file_name[],
 ******************************************************************************/
 void create_bmp_file_if_needed(char_t in_name[],
                                 char_t out_name[],
-                                int16_t **out_image);
+                                sint16_t **out_image);
 
 /******************************************************************************
 *
@@ -389,7 +389,7 @@ void create_bmp_file_if_needed(char_t in_name[],
 *   This function writes an image array to a bmp image file.
 *
 ******************************************************************************/
-void write_bmp_image(char_t file_name[], int16_t **array);
+void write_bmp_image(char_t file_name[], sint16_t **array);
 
 /******************************************************************************
 *
@@ -412,7 +412,7 @@ int32_t calculate_pad(int32_t width);
 *   it returns a ZERO.
 *
 ******************************************************************************/
-int16_t get_image_size(char_t file_name[], int32_t *rows, int32_t *cols);
+sint16_t get_image_size(char_t file_name[], int32_t *rows, int32_t *cols);
 
 /******************************************************************************
 *
@@ -422,7 +422,7 @@ int16_t get_image_size(char_t file_name[], int32_t *rows, int32_t *cols);
 *   image file.
 *
 ******************************************************************************/
-int16_t get_bitsperpixel(char_t file_name[], int32_t *bitsperpixel);
+sint16_t get_bitsperpixel(char_t file_name[], int32_t *bitsperpixel);
 
 /******************************************************************************
 *
@@ -431,7 +431,7 @@ int16_t get_bitsperpixel(char_t file_name[], int32_t *bitsperpixel);
 *   This function reads the lsb flag from a tiff image file.
 *
 ******************************************************************************/
-int16_t get_lsb(char_t name[]);
+sint16_t get_lsb(char_t name[]);
 
 /******************************************************************************
 *
@@ -441,7 +441,7 @@ int16_t get_lsb(char_t name[]);
 *   the file extension.  Next look at the filetype to ensure it is 0x4d42.
 *
 ******************************************************************************/
-int16_t is_a_bmp(char_t file_name[]);
+sint16_t is_a_bmp(char_t file_name[]);
 
 /******************************************************************************
 *
@@ -451,7 +451,7 @@ int16_t is_a_bmp(char_t file_name[]);
 *   the file extension.  Next look at the first four bytes of the header.
 *
 ******************************************************************************/
-int16_t is_a_tiff(char_t file_name[]);
+sint16_t is_a_tiff(char_t file_name[]);
 
 /******************************************************************************
 *
@@ -460,7 +460,7 @@ int16_t is_a_tiff(char_t file_name[]);
 *   This routine reads the image data from either a tiff or bmp image.
 *
 ******************************************************************************/
-void read_image_array(char_t file_name[], int16_t **array);
+void read_image_array(char_t file_name[], sint16_t **array);
 
 /******************************************************************************
 *
@@ -469,7 +469,7 @@ void read_image_array(char_t file_name[], int16_t **array);
 *   This routine writes the image data to either a tiff or bmp image.
 *
 ******************************************************************************/
-void write_image_array(char_t file_name[], int16_t **array);
+void write_image_array(char_t file_name[], sint16_t **array);
 
 /******************************************************************************
 *
@@ -510,7 +510,7 @@ void equate_bitmapheaders(bitmapheader *src, bitmapheader *dest);
 *   It returns a 1 if the images are not the same size.
 *
 ******************************************************************************/
-int16_t are_not_same_size(char_t file1[], char_t file2[]);
+sint16_t are_not_same_size(char_t file1[], char_t file2[]);
 
 /******************************************************************************
 *
@@ -522,7 +522,7 @@ int16_t are_not_same_size(char_t file1[], char_t file2[]);
 ******************************************************************************/
 void create_file_if_needed(char_t in_name[], 
                             char_t out_name[],
-                            int16_t **array);
+                            sint16_t **array);
 
 /******************************************************************************
 *
