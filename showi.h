@@ -15,6 +15,8 @@
 *   Modifications:
 *      1 October 1998 - created to work with 
 *           all I O routines in imageio.c.
+*      28 July 2015 - Refactored
+*           Iulian-Razvan Matesica, Scoala de Vara - Thales - 2015
 *
 ******************************************************************************/
 #ifndef SHOWI_H
