@@ -1,6 +1,6 @@
 LIB      = -lm
 CC       = gcc
-COMPILE  = gcc -c
+COMPILE  = gcc -c -std=gnu99 -g
 LINK     = gcc -o
 
 imageio.o: imageio.c
