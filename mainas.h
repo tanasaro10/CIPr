@@ -25,3 +25,15 @@
 #include "cips.h"
 #include "mtypes.h"
 
+enum eTag {
+	eReturnOK=0,
+	eImage1Null=1,
+	eImage2Null=2,
+	eNotStuffArg=3,
+	eNotExistName1=4,
+	eNotExistName2=5,
+	eNotSameSize=6
+
+
+}error;
+enum eTag errFlag;

@@ -1,7 +1,7 @@
 
     /************************************************
     *
-    *   file ilabel.h
+    *   file ilabel.c
     *
     *   Functions: This file contains
     *       main
@@ -26,7 +26,7 @@
     *      19 September 1998 - modified to work with 
     *            all I O routines in imageio.c.
     *	   Modified Date: 27 Iuly 2015 
-	  *		 Author: Mihu Andrei Cristian
+    *		 Author: Mihu Andrei Cristian
     *		 Scoala de vara Thales
     *
     *************************************************/
@@ -35,7 +35,7 @@
 
 #include "ilabel.h"
 
-int16_t **image;
+sint16_t **image;
 
          /******************************
          *
@@ -44,7 +44,7 @@ int16_t **image;
          *
          *******************************/
 
-int16_t aperiod[R][C] = {
+sint16_t aperiod[R][C] = {
                    {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,  0,  0,  0,  0,  0},
@@ -55,7 +55,7 @@ int16_t aperiod[R][C] = {
                    {  0,  0,VAL,VAL,  0,  0,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t acomma[R][C] = {
+sint16_t acomma[R][C] = {
                    {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,  0,  0,  0,  0,  0},
@@ -66,7 +66,7 @@ int16_t acomma[R][C] = {
                    {  0,  0,VAL,VAL,  0,  0,  0},
                    {  0,  0,  0,VAL,  0,  0,  0}};
 
-int16_t aexclam[R][C] = {
+sint16_t aexclam[R][C] = {
                    {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,  0,VAL,  0,  0,  0},
                    {  0,  0,  0,VAL,  0,  0,  0},
@@ -77,7 +77,7 @@ int16_t aexclam[R][C] = {
                    {  0,  0,  0,VAL,  0,  0,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t xx[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t xx[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,  0,  0,  0,  0,  0},
@@ -87,7 +87,7 @@ int16_t xx[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t aa[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t aa[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,  0,VAL,  0,  0,  0},
                    {  0,  0,VAL,  0,VAL,  0,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
@@ -97,7 +97,7 @@ int16_t aa[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t ab[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t ab[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,VAL,VAL,VAL,  0,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
@@ -107,7 +107,7 @@ int16_t ab[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,VAL,VAL,VAL,  0,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t ac[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t ac[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,VAL,VAL,VAL,  0,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,VAL,  0,  0,  0,  0,  0},
@@ -117,7 +117,7 @@ int16_t ac[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,VAL,VAL,VAL,  0,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t ad[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t ad[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,VAL,VAL,VAL,  0,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
@@ -127,7 +127,7 @@ int16_t ad[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,VAL,VAL,VAL,  0,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t ae[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t ae[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,VAL,VAL,VAL,VAL,  0},
                    {  0,VAL,  0,  0,  0,  0,  0},
                    {  0,VAL,  0,  0,  0,  0,  0},
@@ -137,7 +137,7 @@ int16_t ae[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,VAL,VAL,VAL,VAL,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t af[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t af[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,VAL,VAL,VAL,VAL,  0},
                    {  0,VAL,  0,  0,  0,  0,  0},
                    {  0,VAL,  0,  0,  0,  0,  0},
@@ -147,7 +147,7 @@ int16_t af[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,  0,  0,  0,  0,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t ag[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t ag[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,VAL,VAL,VAL,  0,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,VAL,  0,  0,  0,  0,  0},
@@ -157,7 +157,7 @@ int16_t ag[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,VAL,VAL,VAL,VAL,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t ah[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t ah[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
@@ -167,7 +167,7 @@ int16_t ah[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t ai[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t ai[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,VAL,VAL,VAL,VAL,  0},
                    {  0,  0,  0,VAL,  0,  0,  0},
                    {  0,  0,  0,VAL,  0,  0,  0},
@@ -177,7 +177,7 @@ int16_t ai[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,VAL,VAL,VAL,VAL,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t aj[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t aj[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,VAL,VAL,VAL,VAL,  0},
                    {  0,  0,  0,VAL,  0,  0,  0},
                    {  0,  0,  0,VAL,  0,  0,  0},
@@ -187,7 +187,7 @@ int16_t aj[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,VAL,  0,  0,  0,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t ak[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t ak[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,VAL,  0,  0,VAL,  0,  0},
                    {  0,VAL,  0,VAL,  0,  0,  0},
@@ -197,7 +197,7 @@ int16_t ak[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t al[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t al[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,  0,  0,  0,  0,  0},
                    {  0,VAL,  0,  0,  0,  0,  0},
                    {  0,VAL,  0,  0,  0,  0,  0},
@@ -207,7 +207,7 @@ int16_t al[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,VAL,VAL,VAL,VAL,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t am[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t am[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,VAL,VAL,  0,VAL,VAL,  0},
                    {  0,VAL,  0,VAL,  0,VAL,  0},
@@ -217,7 +217,7 @@ int16_t am[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,  0,VAL,  0,VAL,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t an[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t an[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,VAL,VAL,  0,  0,VAL,  0},
                    {  0,VAL,  0,VAL,  0,VAL,  0},
@@ -227,7 +227,7 @@ int16_t an[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t ao[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t ao[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,VAL,VAL,VAL,  0,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
@@ -237,7 +237,7 @@ int16_t ao[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,VAL,VAL,VAL,  0,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t ap[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t ap[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,VAL,VAL,VAL,  0,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
@@ -247,7 +247,7 @@ int16_t ap[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,  0,  0,  0,  0,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t aq[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t aq[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,VAL,VAL,VAL,  0,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
@@ -257,7 +257,7 @@ int16_t aq[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,VAL,VAL,VAL,VAL,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t ar[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t ar[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,VAL,VAL,VAL,  0,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
@@ -266,7 +266,7 @@ int16_t ar[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
-int16_t as[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t as[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,VAL,VAL,VAL,  0,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,VAL,  0,  0,  0,  0,  0},
@@ -276,7 +276,7 @@ int16_t as[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,VAL,VAL,VAL,  0,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t at[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t at[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,VAL,VAL,VAL,VAL,  0},
                    {  0,  0,  0,VAL,  0,  0,  0},
                    {  0,  0,  0,VAL,  0,  0,  0},
@@ -286,7 +286,7 @@ int16_t at[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,  0,VAL,  0,  0,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t au[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t au[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
@@ -296,7 +296,7 @@ int16_t au[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,VAL,VAL,VAL,  0,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t av[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t av[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
@@ -306,7 +306,7 @@ int16_t av[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,  0,VAL,  0,  0,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t aw[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t aw[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,VAL,  0,VAL,  0,VAL,  0},
                    {  0,VAL,  0,VAL,  0,VAL,  0},
@@ -316,7 +316,7 @@ int16_t aw[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,VAL,  0,VAL,  0,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t ax[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t ax[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,  0,VAL,  0,VAL,  0,  0},
@@ -326,7 +326,7 @@ int16_t ax[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t ay[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t ay[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,  0,VAL,  0,VAL,  0,  0},
@@ -336,7 +336,7 @@ int16_t ay[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,  0,VAL,  0,  0,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t az[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t az[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,VAL,VAL,VAL,VAL,  0},
                    {  0,  0,  0,  0,  0,VAL,  0},
                    {  0,  0,  0,  0,VAL,  0,  0},
@@ -346,7 +346,7 @@ int16_t az[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,VAL,VAL,VAL,VAL,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t a1[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t a1[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,  0,VAL,  0,  0,  0},
                    {  0,  0,VAL,VAL,  0,  0,  0},
                    {  0,VAL,  0,VAL,  0,  0,  0},
@@ -356,7 +356,7 @@ int16_t a1[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,VAL,VAL,VAL,VAL,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t a2[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t a2[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,VAL,VAL,VAL,  0,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,  0,  0,  0,VAL,  0,  0},
@@ -366,7 +366,7 @@ int16_t a2[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,VAL,VAL,VAL,VAL,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t a3[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t a3[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,VAL,VAL,VAL,  0,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,  0,  0,  0,  0,VAL,  0},
@@ -376,7 +376,7 @@ int16_t a3[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,VAL,VAL,VAL,  0,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t a4[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t a4[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,  0,VAL,  0,  0,  0},
                    {  0,VAL,  0,VAL,  0,  0,  0},
                    {  0,VAL,  0,VAL,  0,  0,  0},
@@ -386,7 +386,7 @@ int16_t a4[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,  0,VAL,  0,  0,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t a5[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t a5[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,VAL,VAL,VAL,VAL,  0},
                    {  0,VAL,  0,  0,  0,  0,  0},
                    {  0,VAL,  0,  0,  0,  0,  0},
@@ -396,7 +396,7 @@ int16_t a5[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,VAL,VAL,VAL,  0,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t a6[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t a6[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,VAL,VAL,VAL,  0,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,VAL,  0,  0,  0,  0,  0},
@@ -406,7 +406,7 @@ int16_t a6[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,VAL,VAL,VAL,  0,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t a7[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t a7[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,VAL,VAL,VAL,VAL,  0},
                    {  0,  0,  0,  0,  0,VAL,  0},
                    {  0,  0,  0,  0,  0,VAL,  0},
@@ -416,7 +416,7 @@ int16_t a7[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,VAL,  0,  0,  0,  0,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t a8[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t a8[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,VAL,VAL,VAL,  0,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
@@ -426,7 +426,7 @@ int16_t a8[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,VAL,VAL,VAL,  0,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t a9[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t a9[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,VAL,VAL,VAL,  0,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
                    {  0,VAL,  0,  0,  0,VAL,  0},
@@ -436,7 +436,7 @@ int16_t a9[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,  0,  0,  0,VAL,  0},
                    {  0,  0,  0,  0,  0,  0,  0}};
 
-int16_t a0[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
+sint16_t a0[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
                    {  0,  0,VAL,VAL,VAL,  0,  0},
                    {  0,VAL,  0,  0,VAL,VAL,  0},
                    {  0,VAL,  0,  0,VAL,VAL,  0},
@@ -448,16 +448,39 @@ int16_t a0[R][C] = { {  0,  0,  0,  0,  0,  0,  0},
 
 
 
-void main(int32_t  argc, char_t *argv[])
+static int copy_array_into_image(sint16_t a[R][C],
+			                           sint16_t **the_image,
+                                 sint16_t il,
+                                 sint16_t ie)
 {
-  int32_t l=1, w=1;
-  int32_t counter=0, i, j, il, ie=7, ll, le;
-  uint32_t length, width;
+	uint16_t i, j;
+	errFlag = eRrturnOK;	
+
+	if(the_image == NULL) 
+  {
+	for(i=0; i<R; i++) 
+  	{
+		for(j=0; j<C; j++) 
+			{
+			the_image[il+i][ie+j] = a[i][j];
+			}
+		} printf("the_image = NULL");
+		errFlag = eImageNULL;
+	}
+}  /* ends copy_array_into_image */
+
+
+int main(uint16_t  argc, char_t *argv[])
+{
+  uint16_t l=1, w=1;
+  uint16_t counter=0, i, j, il, ie=7, ll, le;
+  sint32_t length, width;
+	errFlag = eReturnOK;
 
   if(argc < 5){
     printf("\n usage: ilabel file-name il ie text");
     printf("\n  the file-name image must already exist");
-    exit(0);
+    errFlag = eNotSuffArg;
   }
 
       /****************************************
@@ -467,10 +490,10 @@ void main(int32_t  argc, char_t *argv[])
       *   the image.
       *
       ****************************************/
-
-  if(does_not_exist(argv[1])){
+if(errFlag == eReturnOK) {	
+  if(does_not_exist(argv[1])) {
     printf("\nFile %s does not exist \nCreate it", argv[1]);
-    exit(0);
+    errFlag = eNotExist;
   }  /* ends if does not exist */
   else{  /* else it does exist */
     get_image_size(argv[1], &length, &width);
@@ -491,8 +514,10 @@ void main(int32_t  argc, char_t *argv[])
          *******************************/
 
   printf("\n");
-  for(i=4; i<argc; i++){
-    for(j=0; j<(strlen(argv[i])); j++){
+  for(i=4; i<argc; i++)
+	{
+	    for(j=0; j<(strlen(argv[i])); j++)
+		{
 
         argv[i][j] = tolower(argv[i][j]);
 
@@ -590,22 +615,12 @@ void main(int32_t  argc, char_t *argv[])
 
   write_image_array(argv[1], image);
   free_image_array(image, length);
-   
+ }  
+	return errFlag;
 }  /* ends main */
 
 
 
 
-void copy_array_into_image(int16_t a[R][C],
-			                     int16_t **the_image,
-                           int32_t il,
-                           int32_t ie)
-{
-  int32_t i, j;
-  for(i=0; i<R; i++) {
-    for(j=0; j<C; j++) {
-	    the_image[il+i][ie+j] = a[i][j];
-      }
-  }
-}  /* ends copy_array_into_image */
+
 

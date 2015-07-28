@@ -23,25 +23,32 @@
    *		 Scoala de vara Thales
    *************************************************/
 
-#include "cips.h"
+#include "mainas.h"
 
 
 
-main(argc, argv)
-   int  argc;
-   char *argv[];
+int main(uint16_t argc, char_t *argv[])
 {
 
-   char     name1[80], name2[80], name3[80];
-   long     bits_per_pixel, length, width;
-   short    **image1, **image2;
-   short    max;
+   char_t     name1[80], name2[80], name3[80];
+   uint32_t     bits_per_pixel, length, width;
+   sint16_t    **image1, **image2;
+   uint16_t    max;
+	 errFlag = eReturnOK;
 
        /******************************************
        *
        *  Interpret the command line parameters.
        *
        *******************************************/
+
+if(image1 == NULL) {
+	errFlag = eImage1Null;
+}
+
+if(image2 == NULL) {
+	errFlag = eImage2Null;
+}
 
    if(argc != 5){
     printf(
@@ -50,8 +57,10 @@ main(argc, argv)
      "out_file add-subtract"
      "\n"
      "\n   recall add-subtract a=add s=subtract\n");
-    exit(0);
+    errFlag = eNotStuffArg;
    }
+
+if(errFlag == eReturnOK) {
 
    strcpy(name1, argv[1]);
    strcpy(name2, argv[2]);
@@ -60,14 +69,18 @@ main(argc, argv)
    if(does_not_exist(name1)){
     printf("\nERROR input file %s does not exist",
              name1);
-    exit(0);
+    errFlag = eNotExistName1;
    }
+
+if(errFlag == eReturnOK) {
 
    if(does_not_exist(name2)){
     printf("\nERROR input file %s does not exist",
              name2);
-    exit(0);
+    errFlag = eNotExistName2;
    }
+
+if(errFlag == eReturnOK) {
 
        /******************************************
        *
@@ -80,8 +93,10 @@ main(argc, argv)
       printf(
       "\nERROR Image files %s and %s are not same size", 
       name1, name2);
-      exit(0);
+      errFlag = eNotSameSize;
    }
+
+if(errFlag == eReturnOK) {
 
        /******************************************
        *
@@ -130,4 +145,9 @@ main(argc, argv)
    free_image_array(image1, length);
    free_image_array(image2, length);
 
+}//eNotSameSize
+}//eNotExistName
+}//eNotExistName1
+}/*eNotStuffArg*/
+		return errFlag;
 }  /* ends main  */

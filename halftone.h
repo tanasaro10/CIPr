@@ -24,3 +24,11 @@
    *************************************************/
 #include "mtypes.h"
 #include "cips.h"
+
+enum eTag{
+	eReturnOK=0,
+	eNotSuffArg=1,
+	eNoName=3
+}error;
+enum eTag errFlag;
+
