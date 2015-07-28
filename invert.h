@@ -28,10 +28,21 @@
    *      19 September 1998 - modified to work with 
    *           all I O routines in imageio.c.
    *	   Modified Date: 27 Iuly 2015 
-   *		 Author: Mihu Andrei Cristian
-   *		 Scoala de vara Thales
+   *	   Author: Mihu Andrei Cristian
+   *	   Scoala de vara Thales
    *
    ***********************************************/
 
 #include "cips.h"
 #include "mtypes.h"
+
+enum eTag{
+
+	eReturnOK=0,
+	eImageNULL=1,
+	eNotStuffArg=2,
+	eOKisNotValab=3
+	
+}error;
+enum eTag errFlag;
+

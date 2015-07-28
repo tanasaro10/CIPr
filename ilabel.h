@@ -26,17 +26,32 @@
     *      19 September 1998 - modified to work with 
     *            all I O routines in imageio.c.
     *	   Modified Date: 27 Iuly 2015 
-	  *		 Author: Mihu Andrei Cristian
-    *		 Scoala de vara Thales
+    *	   Author: Mihu Andrei Cristian
+    *	   Scoala de vara Thales
     *
     *************************************************/
 
 
 #include "cips.h"
+#include "imageio.h"
 #include "mtypes.h"
 
-#define R             9
-#define C             7
-#define COUNTER_LIMIT 8
-#define IE_START      7
-#define VAL         200
+#define R             9u
+#define C             7u
+#define COUNTER_LIMIT 8u
+#define IE_START      7u
+#define VAL         200u
+
+enum eTag{
+
+	eReturnOK=0,
+	eNotSuffArg=1,
+	eNotExist=2,
+	eImageNULL=3
+
+}error;
+
+enum eTag errFlag;
+
+
+
