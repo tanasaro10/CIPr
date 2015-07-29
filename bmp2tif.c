@@ -22,62 +22,72 @@
    *
    *       Modifications:
    *         27 September 1998 - created
+   *         27 July 2015 - refactored
+   *         28 July 2015 - refactored
+   *           Alexandra Bodirlau, Scoala de Vara - Thales - 2015
    *
    *************************************************/
 
 #include "cips.h"
+#include "imageio.h"
+#include "mtypes.h"
+#include "bmp2tif.h"
 
+int main(int32_t argc, char_t *argv[]) {
+  char_t             *check_extension;
+  sint32_t           rows_number, columns_number;
+  sint16_t           **the_image;
+  tiff_header_struct image_header;
+  bmpfileheader      bmp_file_header;
+  bitmapheader       bmheader;
+  errors             error_flag = NO_ERROR;
 
-main(argc, argv)
-   int  argc;
-   char *argv[];
-{
-   char   *cc;
-   int    l, w;
-   int    ok = 0;
-   short  **the_image;
-   struct tiff_header_struct image_header;
-   struct bmpfileheader      bmp_file_header;
-   struct bitmapheader       bmheader;
+  if(argc < PARAM_NUMBERS || argc > PARAM_NUMBERS){
+    printf("\nusage: bmp2tif bmp-file-name tif-file-name\n");
+    error_flag = WRONG_NUMBER_OF_PARAMETERS;
+  }
+  else {
+    if(does_not_exist(argv[1])){
+      printf("\nERROR input file %s does not exist\n", argv[1]);
+      error_flag = IN_FILE_DOES_NOT_EXIST;
+    }
 
-   if(argc < 3 || argc > 3){
-      printf(
-      "\nusage: bmp2tif bmp-file-name tif-file-name\n");
-      exit(-1);
-   }
+    if (error_flag == NO_ERROR) {
+      check_extension = strstr(argv[1], ".bmp");
+      if(check_extension == NULL){  
+        printf("\nERROR %s must be a bmp file\n", argv[1]);
+        error_flag = ARG1_IS_NOT_BMP_FILE;
+      }  
 
-   if(does_not_exist(argv[1])){
-    printf("\nERROR input file %s does not exist",
-             argv[1]);
-    exit(0);
-   }
+      check_extension = strstr(argv[2], ".tif");
+      if(check_extension == NULL){  /* create a bmp */
+        printf("\nERROR %s must be a tiff file name\n", argv[2]);
+        error_flag = ARG2_IS_NOT_TIF_FILE;
+      }
+    }
 
-   cc = strstr(argv[1], ".bmp");
-   if(cc == NULL){  
-      printf("\nERROR %s must be a bmp file",
-             argv[1]);
-    exit(0);
-   }  /* ends tif */
+    if (error_flag == NO_ERROR) {
+      if (get_image_size(argv[1], &rows_number, &columns_number) != 1) {
+        error_flag = GET_IMAGE_SIZE_ERROR;
+      }
 
-   cc = strstr(argv[2], ".tif");
-   if(cc == NULL){  /* create a bmp */
-      printf("\nERROR %s must be a tiff file name",
-             argv[2]);
-      exit(0);
-   }
+      the_image = allocate_image_array(rows_number, columns_number);
+      if (the_image == NULL) {
+        error_flag = ALLOCATE_IMAGE_ARRAY_ERROR;
+      }
+      else {
+        image_header.lsb            = LSB;
+        image_header.bits_per_pixel = BITS_PER_PIXEL;
+        image_header.image_length   = rows_number;
+        image_header.image_width    = columns_number;
+        image_header.strip_offset   = STRIP_OFFSET;
+        create_allocate_tiff_file(argv[2], &image_header);
+        read_image_array(argv[1], the_image);
+        write_image_array(argv[2], the_image);
+        free_image_array(the_image, rows_number);
+      }
+    }
+  }
 
-   get_image_size(argv[1], &l, &w);
-   the_image = allocate_image_array(l, w);
-   image_header.lsb            = 1;
-   image_header.bits_per_pixel = 8;
-   image_header.image_length   = l;
-   image_header.image_width    = w;;
-   image_header.strip_offset   = 1000;
-   create_allocate_tiff_file(argv[2], 
-                             &image_header);
-
-   read_image_array(argv[1], the_image);
-   write_image_array(argv[2], the_image);
-   free_image_array(the_image, l);
-
+  return error_flag;
 }  /* ends main */

@@ -1,5 +1,4 @@
 
-
    /************************************************
    *
    *       file create.c
@@ -22,57 +21,57 @@
    *              an entire image array at once.
    *         18 September 1998 - modified to work with 
    *              all I O routines in imageio.c.
+   *         27 July 2015 - refactored
+   *         28 July 2015 - refactored
+   *           Alexandra Bodirlau, Scoala de Vara - Thales - 2015
    *
    *************************************************/
 
 #include "cips.h"
+#include "imageio.h"
+#include "mtypes.h"
+#include "create.h"
 
+int main(int32_t argc, char_t *argv[]) {
+   char_t             *check_ext;
+   int32_t            rows_number, columns_number;
+   int16_t            ok = 0; 
+   tiff_header_struct image_header;
+   bmpfileheader      bmp_file_header;
+   bitmapheader       bmheader;
+   errors             error_flag = NO_ERROR;
 
-main(argc, argv)
-   int  argc;
-   char *argv[];
-{
-   char   *cc;
-   int    l, w;
-   int    ok = 0;
-   struct tiff_header_struct image_header;
-   struct bmpfileheader      bmp_file_header;
-   struct bitmapheader       bmheader;
-
-   if(argc < 4 || argc > 4){
-      printf(
-      "\nusage: create file-name length width\n");
-      exit(-1);
+   if ((argc < PARAM_NUMBERS) || (argc > PARAM_NUMBERS)) {
+      printf("\nusage: create file-name length width\n");
+      error_flag = WRONG_NUMBER_OF_PARAMETERS;
    }
+   else {
+      rows_number = atoi(argv[2]);
+      columns_number = atoi(argv[3]);
 
-   l = atoi(argv[2]);
-   w = atoi(argv[3]);
+      check_ext = strstr(argv[1], ".tif");
+      if (check_ext != NULL) {  /* create a tif */
+         ok = 1;
+         image_header.lsb            = LSB;
+         image_header.bits_per_pixel = BITS_PER_PIXEL;
+         image_header.image_length   = rows_number;
+         image_header.image_width    = columns_number;
+         image_header.strip_offset   = STRIP_OFFSET;
+         create_allocate_tiff_file(argv[1], &image_header);
+      }  /* ends tif */
 
-   cc = strstr(argv[1], ".tif");
-   if(cc != NULL){  /* create a tif */
-      ok = 1;
-      image_header.lsb            = 1;
-      image_header.bits_per_pixel = 8;
-      image_header.image_length   = l;
-      image_header.image_width    = w;;
-      image_header.strip_offset   = 1000;
-      create_allocate_tiff_file(argv[1], 
-                                &image_header);
-   }  /* ends tif */
+      check_ext = strstr(argv[1], ".bmp");
+      if (check_ext != NULL) {  /* create a bmp */
+         ok = 1;
+         bmheader.height = rows_number;
+         bmheader.width  = columns_number;
+         create_allocate_bmp_file(argv[1], &bmp_file_header, &bmheader);
+      }  /* ends tif */
 
-   cc = strstr(argv[1], ".bmp");
-   if(cc != NULL){  /* create a bmp */
-      ok = 1;
-      bmheader.height = l;
-      bmheader.width  = w;
-      create_allocate_bmp_file(argv[1], 
-                               &bmp_file_header, 
-                               &bmheader);
-   }  /* ends tif */
-
-   if(ok == 0){
-      printf("\nERROR input file neither tiff nor bmp");
-      exit(0);
+      if (ok == 0) {
+         printf("\nERROR input file neither tiff nor bmp\n");
+         error_flag = WRONG_TYPE_OF_INPUT_FILE;
+      }
    }
-
+   return error_flag;
 }
