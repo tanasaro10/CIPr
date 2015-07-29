@@ -1,5 +1,4 @@
 
-
     /***********************************************
     *
     *       file boole.c
@@ -25,6 +24,7 @@
     *         22 August 1998 - modified to work on 
     *              entire images at once.
     *         27 July 2015 - refactored
+    *         28 July 2015 - refactored
     *           Alexandra Bodirlau, Scoala de Vara - Thales - 2015
     *
     ***********************************************/
@@ -45,9 +45,9 @@
    *
    *************************************************/
 
-void and_image(int16_t **the_image, int16_t **out_image,
-          int32_t rows, int32_t cols) {
-  int32_t  i, j;
+void and_image(sint16_t **the_image, sint16_t **out_image,
+          sint32_t rows, sint32_t cols) {
+  sint32_t  i, j;
 
   for (i = 0; i < rows; i++) {
     if ((i % 10) == 0) {
@@ -82,9 +82,9 @@ void and_image(int16_t **the_image, int16_t **out_image,
    *
    *************************************************/
 
-void or_image(int16_t **the_image, int16_t **out_image,
-         int32_t rows, int32_t cols) {
-  int32_t  i, j;
+void or_image(sint16_t **the_image, sint16_t **out_image,
+         sint32_t rows, sint32_t cols) {
+  sint32_t  i, j;
 
   for (i = 0; i < rows; i++) {
     if ((i%10) == 0) {
@@ -125,10 +125,10 @@ void or_image(int16_t **the_image, int16_t **out_image,
    *
    *************************************************/
 
-void xor_image(int16_t **the_image, int16_t **out_image,
-         int32_t rows, int32_t cols) {
-  int32_t  i, j;
-  int16_t  answer;
+void xor_image(sint16_t **the_image, sint16_t **out_image,
+         sint32_t rows, sint32_t cols) {
+  sint32_t  i, j;
+  sint16_t  answer;
 
   for (i = 0; i < rows; i++) {
     if ((i%10) == 0) {
@@ -169,9 +169,9 @@ void xor_image(int16_t **the_image, int16_t **out_image,
    *
    ************************************************/
 
-void nand_image(int16_t **the_image, int16_t **out_image,
-         int32_t rows, int32_t cols, int16_t value) {
-  int32_t  i, j;
+void nand_image(sint16_t **the_image, sint16_t **out_image,
+         sint32_t rows, sint32_t cols, sint16_t value) {
+  sint32_t  i, j;
 
   for (i = 0; i < rows; i++) {
     if ((i%10) == 0) {
@@ -206,9 +206,9 @@ void nand_image(int16_t **the_image, int16_t **out_image,
    *
    ************************************************/
 
-void nor_image(int16_t **the_image, int16_t **out_image,
-         int32_t rows, int32_t cols, int16_t value) {
-  int32_t  i, j;
+void nor_image(sint16_t **the_image, sint16_t **out_image,
+         sint32_t rows, sint32_t cols, sint16_t value) {
+  sint32_t  i, j;
 
   for (i = 0; i < rows; i++){
     if ((i % 10) == 0) {
@@ -227,9 +227,6 @@ void nor_image(int16_t **the_image, int16_t **out_image,
 } /* ends nor_image */
 
 
-
-
-
    /***********************************************
    *
    *   not_image(...
@@ -242,9 +239,9 @@ void nor_image(int16_t **the_image, int16_t **out_image,
    *
    ************************************************/
 
-void not_image(int16_t **the_image, int16_t **out_image,
-         int32_t rows, int32_t cols, int16_t value) {
-  int32_t  i, j;
+void not_image(sint16_t **the_image, sint16_t **out_image,
+         sint32_t rows, sint32_t cols, sint16_t value) {
+  sint32_t  i, j;
 
   for (i = 0; i < rows; i++) {
     for(j = 0; j < cols; j++) {
