@@ -10,24 +10,24 @@ sint32_t main(sint32_t argc, char_t **argv)
   bitmapheader       bmheader;
    
   if(argc < 3 || argc > 3){
-    printf("\nusage: tif2bmp tif-file-name bmp-file-name\n");
+    (void)printf("\nusage: tif2bmp tif-file-name bmp-file-name\n");
     error = ERR_INVALID_NO_OF_ARGS;
   }
 
   if(does_not_exist(argv[1])){
-    printf("\nERROR input file %s does not exist", argv[1]);
+    (void)printf("\nERROR input file %s does not exist", argv[1]);
     error = ERR_NO_INPUT_FILE;
   }
 
   cc = strstr(argv[1], ".tif");
   if(cc == NULL){  
-    printf("\nERROR %s must be a tiff file", argv[1]);
+    (void)printf("\nERROR %s must be a tiff file", argv[1]);
     error = ERR_INPUT_NOT_TIF;
   }
 
   cc = strstr(argv[2], ".bmp");
   if(cc == NULL){  /* create a bmp */
-    printf("\nERROR %s must be a bmp file name", argv[2]);
+    (void)printf("\nERROR %s must be a bmp file name", argv[2]);
     error = ERR_OUTPUT_NOT_BMP;
   }
 
