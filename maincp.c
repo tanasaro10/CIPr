@@ -1,7 +1,7 @@
 
     /***********************************************
     *
-    *    file maincp.c
+    *    file maincp.h
     *
     *    Functions: This file contains
     *       main
@@ -28,23 +28,26 @@
     *           entire image array at once.
     *      18 September 1998 - modified to work with 
     *            all I O routines in imageio.c.
+    *	   Modified Date: 30 Iuly 2015 
+    *		 Author: Mihu Andrei Cristian
+    *		 Scoala de vara Thales
     *
     *************************************************/
 
-#include "cips.h"
+
+#include "maincp.h"
 
 
 
-main(argc, argv)
-   int  argc;
-   char *argv[];
+uint16_t main(uint16_t  argc, char_t *argv[])
 {
 
-   char     name1[80], name2[80];
-   int      i, is_ok, il1, ie1, ll1, le1,
+   char_t     name1[80], name2[80];
+   uint16_t      i, is_ok, il1, ie1, ll1, le1,
             il2, ie2, ll2, le2;
-   long     length1, length2, width1, width2;
-   short    **the_image, **out_image;
+   uint32_t     length1, length2, width1, width2;
+   sint16_t    **the_image, **out_image;
+   errFlag = eReturnOK;
 
        /******************************************
        *
@@ -53,7 +56,7 @@ main(argc, argv)
        *******************************************/
 
    if(argc != 9){
-    printf(
+    (void)printf(
      "\n"
      "\n usage: maincp in-file out_file "
      "in-il in-ie in-ll in-le out-il out-ie"
@@ -61,23 +64,29 @@ main(argc, argv)
      "\n The image portion is pasted from the "
      "\n in-file into the out-file"
      "\n");
-    exit(0);
+    errFlag = eNotSuffArg;
    }
+
+  if(errFlag == eReturnOK){	
 
    strcpy(name1, argv[1]);
    strcpy(name2, argv[2]);
 
    if(does_not_exist(name1)){
-    printf("\nERROR input file %s does not exist",
+    (void)printf("\nERROR input file %s does not exist",
              name1);
-    exit(0);
+    errFlag = eNotExistName1;
    }
 
+  if(errFlag == eReturnOK){
+
    if(does_not_exist(name2)){
-    printf("\nERROR input file %s does not exist",
+    (void)printf("\nERROR input file %s does not exist",
              name2);
-    exit(0);
+    errFlag = eNotExistName2;
    }
+  if(errFlag == eReturnOK){
+
 
    il1 = atoi(argv[3]);
    ie1 = atoi(argv[4]);
@@ -118,15 +127,18 @@ main(argc, argv)
       length2, width2,
       &is_ok);
 
-printf("\nMAIN> is_ok=%d", is_ok);
+(void)printf("\nMAIN> is_ok=%d", is_ok);
 
-   if(is_ok)
+   if(is_ok){
       paste_image_piece(the_image, out_image, 
                         il1, ie1, ll1, le1,
                         il2, ie2);
+   }
 
    write_image_array(name2, out_image);
    free_image_array(out_image, length2);
    free_image_array(the_image, length1);
-
+}//eNotExistName2
+}//eNotExistName1
+}//eNotSuffArg
 }  /* ends main */
