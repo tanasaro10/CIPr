@@ -1,6 +1,6 @@
 #include "stega.h"
 
-void main(sint16_t argc, char_t **argv)
+sint32_t main(sint16_t argc, char_t **argv)
 {
   char_t cover_image_name[80] = {0}, message_image_name[80] = {0};
   sint16_t hide    = 0,
@@ -11,107 +11,116 @@ void main(sint16_t argc, char_t **argv)
   sint32_t clength = 0, 
            mlength = 0, 
            cwidth  = 0,
-           mwidth  = 0;
+           mwidth  = 0,
+           error = ERR_NONE;
 
   sint16_t **the_image = NULL, **out_image = NULL;
-
   // Ensure the command line is correct.
   if(argc < 5) {
     stega_show_usage();
-    exit(0);
+    error = ERR_INVALID_NO_OF_ARGS;
+  } else {
+    printf("Aye!!\n");
+    if(strcmp(argv[1], "-h") == 0) {
+      hide    = 1;
+      uncover = 0;
+    } else if(strcmp(argv[1], "-u") == 0) {
+      hide    = 0;
+      uncover = 1;
+    } else if(hide == 0 && uncover == 0) {
+      printf("\nNiether hiding nor uncovering");
+      printf("\nSo, quitting\n");
+      error = ERR_INVALID_COMMAND;
+    } else {
+      // Does nothing
+    }
   }
 
-  if(strcmp(argv[1], "-h") == 0) {
-    hide    = 1;
-    uncover = 0;
-  } else if(strcmp(argv[1], "-u") == 0) {
-    hide    = 0;
-    uncover = 1;
-  } else if(hide == 0 && uncover == 0) {
-    printf("\nNiether hiding nor uncovering");
-    printf("\nSo, quitting\n");
-    exit(1);
+  if(error == ERR_NONE) {
+    strcpy(cover_image_name, argv[2]);
+    strcpy(message_image_name, argv[3]);
+    n = atoi(argv[4]);
+
+    // Hide the cover image in the message image.
+    if(hide) {
+      if(does_not_exist(cover_image_name)) {
+        printf("\n%s does not exist, quitting", cover_image_name);
+      } else  if(does_not_exist(message_image_name)) {
+        printf("\n%s does not exist, quitting", message_image_name);
+      }
+
+      // Ensure both images have the same height and the cover image is 
+      // n times as wide as the message image. Also determine if the 
+      // bit order is lsb first or not.
+      get_image_size(cover_image_name, &clength, &cwidth);
+      get_image_size(message_image_name, &mlength, &mwidth);
+
+      if(mlength != clength) {
+        printf("\n\nmlength NOT EQUAL TO clength");
+        printf("\nQUITING");
+        error = ERR_INVALID_ARGS;
+      }
+
+      if(cwidth != (n*mwidth)) {
+        printf("\nCover image not wide enough");
+        printf("\nQUITING");
+        error = ERR_INVALID_ARGS;
+      }
+
+      if(error == ERR_NONE) {
+        lsb = get_lsb(cover_image_name);
+
+        // Allocate the two image arrays. Read the cover and message 
+        // images and hide the message image.
+        the_image = allocate_image_array(clength, cwidth);
+        out_image = allocate_image_array(mlength, mwidth);
+        read_image_array(cover_image_name, the_image);
+        read_image_array(message_image_name, out_image);
+        hide_image(the_image, out_image,
+                    mlength, mwidth,
+                    clength, cwidth,
+                    lsb, n);
+        write_image_array(cover_image_name, the_image);
+      }
+    }
+
+    if(error == ERR_NONE) {
+      // Uncover the cover image from the  message image.
+      if(uncover) {
+        printf("\nMAIN> Uncover");
+
+        if(does_not_exist(cover_image_name)){
+           printf("\n%s does not exist, quitting", cover_image_name);
+        }
+
+        // Create the message image to be the correct size.
+        get_image_size(cover_image_name, &clength, &cwidth);
+        mlength = clength;
+        mwidth  = cwidth/n;
+        create_resized_image_file(cover_image_name,
+                                  message_image_name, 
+                                  mlength, mwidth); 
+        lsb = get_lsb(cover_image_name);
+
+        // Allocate the two image arrays. Read the cover image 
+        // and uncover the message image.
+        the_image = allocate_image_array(clength, cwidth);
+        out_image = allocate_image_array(mlength, mwidth);
+        read_image_array(cover_image_name, the_image);
+        uncover_image(the_image, out_image,
+                      mlength, mwidth,
+                      clength, cwidth,
+                      lsb, n);
+        write_image_array(message_image_name, out_image);
+      }
+
+      free_image_array(the_image, clength);
+      free_image_array(out_image, mlength);
+    }
   }
+  
 
-  strcpy(cover_image_name, argv[2]);
-  strcpy(message_image_name, argv[3]);
-  n = atoi(argv[4]);
-
-  // Hide the cover image in the message image.
-  if(hide) {
-    if(does_not_exist(cover_image_name)) {
-      printf("\n%s does not exist, quitting", 
-      cover_image_name);
-    } else  if(does_not_exist(message_image_name)) {
-      printf("\n%s does not exist, quitting", 
-      message_image_name);
-    }
-
-    // Ensure both images have the same height and the cover image is 
-    // eight times as wide as the message image. Also determine if the 
-    // bit order is lsb first or not.
-    get_image_size(cover_image_name, &clength, &cwidth);
-    get_image_size(message_image_name, &mlength, &mwidth);
-
-    if(mlength != clength) {
-      printf("\n\nmlength NOT EQUAL TO clength");
-      printf("\nQUITING");
-      exit(2);
-    }
-
-    if(cwidth != (n*mwidth)) {
-      printf("\nCover image not wide enough");
-      printf("\nQUITING");
-      exit(3);
-    }
-
-    lsb = get_lsb(cover_image_name);
-
-    // Allocate the two image arrays. Read the cover and message 
-    // images and hide the message image.
-    the_image = allocate_image_array(clength, cwidth);
-    out_image = allocate_image_array(mlength, mwidth);
-    read_image_array(cover_image_name, the_image);
-    read_image_array(message_image_name, out_image);
-    hide_image(the_image, out_image,
-                mlength, mwidth,
-                clength, cwidth,
-                lsb, n);
-    write_image_array(cover_image_name, the_image);
-  }
-
-  // Uncover the cover image from the  message image.
-  if(uncover) {
-    printf("\nMAIN> Uncover");
-
-    if(does_not_exist(cover_image_name)){
-       printf("\n%s does not exist, quitting", 
-       cover_image_name);
-    }
-
-    // Create the message image to be the correct size.
-    get_image_size(cover_image_name, &clength, &cwidth);
-    mlength = clength;
-    mwidth  = cwidth/n;
-    create_resized_image_file(cover_image_name,
-                              message_image_name, 
-                              mlength, mwidth); 
-    lsb = get_lsb(cover_image_name);
-
-    // Allocate the two image arrays. Read the cover image 
-    // and uncover the message image.
-    the_image = allocate_image_array(clength, cwidth);
-    out_image = allocate_image_array(mlength, mwidth);
-    read_image_array(cover_image_name, the_image);
-    uncover_image(the_image, out_image,
-                  mlength, mwidth,
-                  clength, cwidth,
-                  lsb, n);
-    write_image_array(message_image_name, out_image);
-  }
-
-  free_image_array(the_image, clength);
-  free_image_array(out_image, mlength);
+  return error;
 }
 
 sint16_t hide_image(sint16_t **cover_image,
@@ -141,6 +150,7 @@ sint16_t hide_pixels(sint16_t **cover_image,
 {
   char_t result = 0, new_message = 0, sample = 0;
   sint16_t c_counter = 0;
+  sint32_t i = 0, j = 0;
 
   char_t mask1[EIGHT] =  {
     0x01,  /* 0000 0001 */
@@ -166,12 +176,11 @@ sint16_t hide_pixels(sint16_t **cover_image,
 
   printf("\nHP> mie=%d   cie=%d   lsb=%d", mie, cie, lsb);
 
-  for(sint32_t i = 0; i < mlength; i++) {
+  for(i = 0; i < mlength; i++) {
     c_counter = 0;
     sample = message_image[i][mie];
 
-    for(sint32_t j = n - 1; j > -1; j--) {
-
+    for(j = n - 1; j > -1; j--) {
       // Find out if the jth bit is a 1 or 0.  If it is non-zero, set
       // the LSB of the message image's pixel.  Else, clear that LSB.
       new_message = cover_image[i][cie+c_counter];
@@ -209,7 +218,9 @@ sint16_t uncover_image(sint16_t **cover_image,
                     sint16_t lsb,
                     sint16_t n)
 {
-  for(sint32_t h_counter = 0; h_counter < mwidth; h_counter++) {
+  sint32_t h_counter = 0;
+
+  for(h_counter = 0; h_counter < mwidth; h_counter++) {
     uncover_pixels(cover_image, 
                     message_image,
                     h_counter,
@@ -253,15 +264,16 @@ sint16_t uncover_pixels(sint16_t **cover_image,
   };
 
   sint16_t c = 0, c_counter = 0;
-  printf("\nUP> mie=%d   cie=%d   lsb=%d", mie, cie, lsb);
+  sint32_t i = 0, j = 0;
 
+  printf("\nUP> mie=%d   cie=%d   lsb=%d", mie, cie, lsb);
   // If a pixel in the cover image is odd, its lsb has been set, so 
   // the corresponding bit in the message image should be set.
-  for(sint32_t i = 0; i < mlength; i++) {
+  for(i = 0; i < mlength; i++) {
     c = n - 1;
     new_message = 0x00;
     
-    for(sint32_t j = 0; j < n; j++) {
+    for(j = 0; j < n; j++) {
        if(is_odd(cover_image[i][cie+j])){
           /* set bit c */
           if(lsb) {

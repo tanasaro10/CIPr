@@ -26,8 +26,12 @@
 #include "mtypes.h"
 #include "imageio.h"
 
-#define  SHEIGHT 20u
-#define  SWIDTH  15u
+#define  SHEIGHT 20
+#define  SWIDTH  15
+
+#define ERR_NONE                 0
+#define ERR_INVALID_NO_OF_ARGS  -1
+#define ERR_NO_INPUT_FILE       -2
 
 /******************************************************************************
 *
@@ -36,10 +40,10 @@
 *   This routine verifies if an image's size fits into another's
 *
 ******************************************************************************/
-sint16_t is_in_image(sint16_t il, 
-                     sint16_t ie, 
-                     sint32_t height, 
-                     sint32_t width);
+static sint16_t is_in_image(sint16_t il, 
+                           sint16_t ie, 
+                           sint32_t height, 
+                           sint32_t width);
 
 /******************************************************************************
 *
@@ -49,6 +53,6 @@ sint16_t is_in_image(sint16_t il,
 *   the application.
 *
 ******************************************************************************/
-void show_screen(sint16_t **the_image, sint16_t il, sint16_t ie);
+static void show_screen(sint16_t **the_image, sint16_t il, sint16_t ie);
 
 #endif
