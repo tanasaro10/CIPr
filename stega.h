@@ -32,6 +32,11 @@
 #include "imageio.h"
 
 #define EIGHT 8
+#define ERR_NONE                 0
+#define ERR_INVALID_NO_OF_ARGS  -1
+#define ERR_INVALID_COMMAND     -2
+#define ERR_INVALID_ARGS        -3
+
 
 /******************************************************************************
 *
@@ -42,14 +47,14 @@
 *   in the message image.
 *
 ******************************************************************************/
-sint16_t hide_image(sint16_t **cover_image,
-                    sint16_t **message_image,
-                    sint32_t mlength,
-                    sint32_t mwidth,
-                    sint32_t clength,
-                    sint32_t cwidth,
-                    sint16_t lsb,
-                    sint16_t n);
+static sint16_t hide_image(sint16_t **cover_image,
+                          sint16_t **message_image,
+                          sint32_t mlength,
+                          sint32_t mwidth,
+                          sint32_t clength,
+                          sint32_t cwidth,
+                          sint16_t lsb,
+                          sint16_t n);
 
 /******************************************************************************
 *
@@ -62,13 +67,13 @@ sint16_t hide_image(sint16_t **cover_image,
 *   cover images.
 *
 ******************************************************************************/
-sint16_t hide_pixels(sint16_t **cover_image,
-                      sint16_t **message_image,
-                      sint16_t mie,
-                      sint16_t cie,
-                      sint16_t lsb,
-                      sint16_t n,
-                      sint32_t mlength);
+static sint16_t hide_pixels(sint16_t **cover_image,
+                            sint16_t **message_image,
+                            sint16_t mie,
+                            sint16_t cie,
+                            sint16_t lsb,
+                            sint16_t n,
+                            sint32_t mlength);
 
 /******************************************************************************
 *
@@ -78,14 +83,14 @@ sint16_t hide_pixels(sint16_t **cover_image,
 *   of the cover_image routine).
 *
 ******************************************************************************/
-sint16_t uncover_image(sint16_t **cover_image,
-                    sint16_t **message_image,
-                    sint32_t mlength,
-                    sint32_t mwidth,
-                    sint32_t clength,
-                    sint32_t cwidth,
-                    sint16_t lsb,
-                    sint16_t n);
+static sint16_t uncover_image(sint16_t **cover_image,
+                              sint16_t **message_image,
+                              sint32_t mlength,
+                              sint32_t mwidth,
+                              sint32_t clength,
+                              sint32_t cwidth,
+                              sint16_t lsb,
+                              sint16_t n);
 
 /******************************************************************************
 *
@@ -96,13 +101,13 @@ sint16_t uncover_image(sint16_t **cover_image,
 *   opposite of the cover_pixels routine.
 *
 ******************************************************************************/
-sint16_t uncover_pixels(sint16_t **cover_image,
-                      sint16_t **message_image,
-                      sint16_t mie,
-                      sint16_t cie,
-                      sint16_t lsb,
-                      sint16_t n,
-                      sint32_t mlength);
+static sint16_t uncover_pixels(sint16_t **cover_image,
+                              sint16_t **message_image,
+                              sint16_t mie,
+                              sint16_t cie,
+                              sint16_t lsb,
+                              sint16_t n,
+                              sint32_t mlength);
 
 /******************************************************************************
 *
@@ -112,7 +117,7 @@ sint16_t uncover_pixels(sint16_t **cover_image,
 *   routine returns a 1, else it returns a 0.
 *
 ******************************************************************************/
-sint16_t is_odd(int16_t number);
+static sint16_t is_odd(int16_t number);
 
 /******************************************************************************
 *
@@ -121,6 +126,6 @@ sint16_t is_odd(int16_t number);
 *   This routine prints the instructions on how to use the application
 *
 ******************************************************************************/
-void stega_show_usage(void);
+static void stega_show_usage(void);
 
 #endif
