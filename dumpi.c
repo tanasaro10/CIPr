@@ -30,12 +30,14 @@
 #include "imageio.h"
 #include "mtypes.h"
 #include "dumpi.h"
+#include <stdlib.h>
 
 int main(int32_t argc, char_t *argv[]) {
    char_t    in_name[MAX_NAME_LENGTH];
    char_t    out_name[MAX_NAME_LENGTH];
    char_t    *line, buffer[10];
-   sint16_t  i, j;
+   sint16_t  i, j, error;
+   sint32_t  *height_aux, *width_aux;
    sint32_t  height, width;
    sint16_t  **the_image;
    errors    error_flag = NO_ERROR; 
@@ -55,6 +57,12 @@ int main(int32_t argc, char_t *argv[]) {
    else {
       strcpy(in_name,  argv[1]);
       strcpy(out_name, argv[2]);
+
+      height_aux = (sint32_t *) malloc(sizeof(sint32_t));
+      width_aux = (sint32_t *) malloc(sizeof(sint32_t));
+      if ((height_aux == NULL) || (width_aux == NULL)) {
+         error_flag = ALLOCATE_MEMORY_ERROR;
+      }
       
          /******************************************
          *
@@ -71,46 +79,50 @@ int main(int32_t argc, char_t *argv[]) {
          error_flag = IN_FILE_DOES_NOT_EXIST;
       }  /* ends if does_not_exist */
 
-      if ((out_file = fopen(out_name, "wt")) == NULL) {
+      out_file = fopen(out_name, "wt");
+      if (out_file == NULL) {
          printf("\nERROR Could not open file %s", out_name);
          error_flag = COULD_NOT_OPEN_OUT_FILE;
       }
 
-      if (error_flag == NO_ERROR) {
-         if (get_image_size(in_name, &height, &width) != 1) {
-            error_flag = GET_IMAGE_SIZE_ERROR;
+      error = get_image_size(in_name, height_aux, width_aux);
+      if ((error_flag != NO_ERROR) || (error != 1)) {
+         error_flag = GET_IMAGE_SIZE_ERROR;
+      }
+      else {
+         height = *height_aux;
+         width  = *width_aux;
+         the_image = allocate_image_array(height, width);
+         read_image_array(in_name, the_image);
+         line = (char_t *) malloc(((width * SIZE_CONST1) + SIZE_CONST2) * sizeof(char_t *));
+
+         if ((line == NULL) || (the_image == NULL)) {
+            error_flag = ALLOCATE_IMAGE_ARRAY_ERROR;
          }
          else {
-            the_image = allocate_image_array(height, width);
-            read_image_array(in_name, the_image);
-            line = (char_t *) malloc(((width * SIZE_CONST1) + SIZE_CONST2) * sizeof(char_t *));
-
-            if ((line == NULL) || (the_image == NULL)) {
-               error_flag = ALLOCATE_IMAGE_ARRAY_ERROR;
+            sprintf(line, "      ");
+            for (i = 0; i < width; i++) {
+               sprintf(buffer, "%4d", i);
+               strcat(line, buffer);
             }
-            else {
-               sprintf(line, "      ");
-               for (i = 0; i < width; i++) {
-                  sprintf(buffer, "%4d", i);
+            strcat(line, "\n");
+            fputs(line, out_file);
+
+            for (i = 0; i < height; i++) {
+               sprintf(line, "%5d>", i);
+               for (j = 0; j < width; j++) {
+                  sprintf(buffer, "-%3d", the_image[i][j]); 
                   strcat(line, buffer);
                }
                strcat(line, "\n");
                fputs(line, out_file);
-
-               for (i = 0; i < height; i++) {
-                  sprintf(line, "%5d>", i);
-                  for (j = 0; j < width; j++) {
-                     sprintf(buffer, "-%3d", the_image[i][j]); 
-                     strcat(line, buffer);
-                  }
-                  strcat(line, "\n");
-                  fputs(line, out_file);
-               }
             }
          }
       }
 
       free_image_array(the_image, height);
+      free(height_aux);
+      free(width_aux);
       fclose(out_file);
    }
 
