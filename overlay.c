@@ -42,11 +42,7 @@
    *
    ***********************************************/
 
-non_zero_overlay(the_image, out_image,
-                 rows, cols)
-   short  **the_image,
-          **out_image;
-   long   cols, rows;
+void non_zero_overlay(sint16_t **the_image, sint16_t **out_image, sint32_t rows, sint32_t cols)
 {
    int    i, j;
 
@@ -75,11 +71,7 @@ non_zero_overlay(the_image, out_image,
    *
    ***********************************************/
 
-zero_overlay(the_image, out_image,
-             rows, cols)
-   short **the_image,
-         **out_image;
-   long  cols, rows;
+void zero_overlay(sint16_t **the_image, sint16_t **out_image, sint32_t rows, sint32_t cols)
 {
    int    i, j;
 
@@ -108,11 +100,7 @@ zero_overlay(the_image, out_image,
    *
    ***********************************************/
 
-greater_overlay(the_image, out_image,
-                rows, cols)
-   short **the_image,
-         **out_image;
-   long  cols, rows;
+void greater_overlay(sint16_t **the_image, sint16_t **out_image, sint32_t rows, sint32_t cols)
 {
    int    i, j;
 
@@ -141,11 +129,7 @@ greater_overlay(the_image, out_image,
    *
    ***********************************************/
 
-less_overlay(the_image, out_image,
-             rows, cols)
-   short **the_image,
-         **out_image;
-   long  cols, rows;
+void less_overlay(sint16_t **the_image, sint16_t **out_image, sint32_t rows, sint32_t cols)
 {
    int    i, j;
 
@@ -175,11 +159,7 @@ less_overlay(the_image, out_image,
    *
    ***********************************************/
 
-average_overlay(the_image, out_image,
-                rows, cols)
-   short **the_image,
-         **out_image;
-   long  cols, rows;
+void average_overlay(sint16_t **the_image, sint16_t **out_image, sint32_t rows, sint32_t cols)
 {
    int    i, j;
 
