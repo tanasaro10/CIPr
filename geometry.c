@@ -135,7 +135,6 @@ int main(int32_t argc, char_t *argv[]) {
         *************************************/
 
         if (strncmp(type, "geometry", 3) == 0) {
-          printf("Here %d %d\n", length, width);
           geometry(the_image, out_image, image_geometry, length, width);
         }  /* ends if */
 

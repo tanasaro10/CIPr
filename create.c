@@ -41,7 +41,7 @@ int main(int32_t argc, char_t *argv[]) {
    bitmapheader       bmheader;
    errors             error_flag = NO_ERROR;
 
-   if ((argc < PARAM_NUMBERS) || (argc > PARAM_NUMBERS)) {
+   if ((argc < PARAM_NUMBER) || (argc > PARAM_NUMBER)) {
       printf("\nusage: create file-name length width\n");
       error_flag = WRONG_NUMBER_OF_PARAMETERS;
    }

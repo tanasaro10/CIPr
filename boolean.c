@@ -58,7 +58,7 @@ int main(int32_t argc, char_t *argv[]) {
        *
        *****************************************/
 
-  if (argc < PARAM_NUMBERS) {
+  if (argc < PARAM_NUMBER) {
     printf(
     "\n\nNot enough parameters:"
     "\n"
