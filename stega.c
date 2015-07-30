@@ -20,7 +20,7 @@ sint32_t main(sint16_t argc, char_t **argv)
     stega_show_usage();
     error = ERR_INVALID_NO_OF_ARGS;
   } else {
-    printf("Aye!!\n");
+    (void)(void)printf("Aye!!\n");
     if(strcmp(argv[1], "-h") == 0) {
       hide    = 1;
       uncover = 0;
@@ -28,8 +28,8 @@ sint32_t main(sint16_t argc, char_t **argv)
       hide    = 0;
       uncover = 1;
     } else if(hide == 0 && uncover == 0) {
-      printf("\nNiether hiding nor uncovering");
-      printf("\nSo, quitting\n");
+      (void)(void)printf("\nNiether hiding nor uncovering");
+      (void)(void)printf("\nSo, quitting\n");
       error = ERR_INVALID_COMMAND;
     } else {
       // Does nothing
@@ -44,9 +44,9 @@ sint32_t main(sint16_t argc, char_t **argv)
     // Hide the cover image in the message image.
     if(hide) {
       if(does_not_exist(cover_image_name)) {
-        printf("\n%s does not exist, quitting", cover_image_name);
+        (void)printf("\n%s does not exist, quitting", cover_image_name);
       } else  if(does_not_exist(message_image_name)) {
-        printf("\n%s does not exist, quitting", message_image_name);
+        (void)printf("\n%s does not exist, quitting", message_image_name);
       }
 
       // Ensure both images have the same height and the cover image is 
@@ -56,14 +56,14 @@ sint32_t main(sint16_t argc, char_t **argv)
       get_image_size(message_image_name, &mlength, &mwidth);
 
       if(mlength != clength) {
-        printf("\n\nmlength NOT EQUAL TO clength");
-        printf("\nQUITING");
+        (void)printf("\n\nmlength NOT EQUAL TO clength");
+        (void)printf("\nQUITING");
         error = ERR_INVALID_ARGS;
       }
 
       if(cwidth != (n*mwidth)) {
-        printf("\nCover image not wide enough");
-        printf("\nQUITING");
+        (void)printf("\nCover image not wide enough");
+        (void)printf("\nQUITING");
         error = ERR_INVALID_ARGS;
       }
 
@@ -87,10 +87,10 @@ sint32_t main(sint16_t argc, char_t **argv)
     if(error == ERR_NONE) {
       // Uncover the cover image from the  message image.
       if(uncover) {
-        printf("\nMAIN> Uncover");
+        (void)printf("\nMAIN> Uncover");
 
         if(does_not_exist(cover_image_name)){
-           printf("\n%s does not exist, quitting", cover_image_name);
+           (void)printf("\n%s does not exist, quitting", cover_image_name);
         }
 
         // Create the message image to be the correct size.
@@ -174,7 +174,7 @@ sint16_t hide_pixels(sint16_t **cover_image,
     0x7F   /* 0111 1111 */
   };
 
-  printf("\nHP> mie=%d   cie=%d   lsb=%d", mie, cie, lsb);
+  (void)printf("\nHP> mie=%d   cie=%d   lsb=%d", mie, cie, lsb);
 
   for(i = 0; i < mlength; i++) {
     c_counter = 0;
@@ -266,7 +266,7 @@ sint16_t uncover_pixels(sint16_t **cover_image,
   sint16_t c = 0, c_counter = 0;
   sint32_t i = 0, j = 0;
 
-  printf("\nUP> mie=%d   cie=%d   lsb=%d", mie, cie, lsb);
+  (void)printf("\nUP> mie=%d   cie=%d   lsb=%d", mie, cie, lsb);
   // If a pixel in the cover image is odd, its lsb has been set, so 
   // the corresponding bit in the message image should be set.
   for(i = 0; i < mlength; i++) {
@@ -298,9 +298,9 @@ sint16_t is_odd(int16_t number)
 
 void stega_show_usage(void)
 {
-  printf("\n\nNot enough parameters:");
-  printf("\n");
-  printf("   "
+  (void)printf("\n\nNot enough parameters:");
+  (void)printf("\n");
+  (void)printf("   "
           "\nstega -h cover-image-name message-image-name n"
           "\n       to hide the message image in the cover image"
           "\n                 or"

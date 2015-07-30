@@ -23,7 +23,7 @@ sint32_t main(sint32_t argc, char_t **argv)
       // Allocate an image array.
       // Read the image and show it on the screen.
       if(does_not_exist(in_name) != 0) {
-         printf("\nERROR input file %s does not exist", in_name);
+         (void)printf("\nERROR input file %s does not exist", in_name);
          error = ERR_NO_INPUT_FILE;
       }
    }
@@ -44,7 +44,7 @@ sint32_t main(sint32_t argc, char_t **argv)
             show_screen(the_image, il, ie);
          }
 
-         printf("\n\n x=quit j=down k=up h=left l=right"
+         (void)printf("\n\n x=quit j=down k=up h=left l=right"
                 "\nEnter choice and press Enter:  ");
          fgets(response, MAX_NAME_LENGTH, stdin);
 
@@ -76,22 +76,22 @@ sint16_t is_in_image(sint16_t il, sint16_t ie, sint32_t height, sint32_t width)
    sint16_t result = 1;
 
    if(il < 0) {
-      printf("\nil=%d tool small", il);
+      (void)printf("\nil=%d tool small", il);
       result = 0;
    }
 
    if(ie < 0) {
-      printf("\nie=%d tool small", ie);
+      (void)printf("\nie=%d tool small", ie);
       result = 0;
    }
 
    if((sint32_t)(il + SHEIGHT) > height) {
-      printf("\nll=%d tool big", il+SHEIGHT);
+      (void)printf("\nll=%d tool big", il+SHEIGHT);
       result = 0;
    }
 
    if((sint32_t)(ie + SWIDTH) > width) {
-      printf("\nle=%d tool big", ie+SWIDTH);
+      (void)printf("\nle=%d tool big", ie+SWIDTH);
       result = 0;
    }
 
@@ -102,16 +102,16 @@ void show_screen(sint16_t **the_image, sint16_t il, sint16_t ie)
 {
    sint32_t i = 0, j = 0;
 
-   printf("\n     ");
+   (void)printf("\n     ");
    for(i = ie - 1; i < ie - 1 + SWIDTH; i++) {
-      printf("-%3d", i);
+      (void)printf("-%3d", i);
    }
 
    for(i = il - 1; i < il - 1 + SHEIGHT; i++) {
-      printf("\n%4d>", i);
+      (void)printf("\n%4d>", i);
       
       for(j = ie - 1; j < ie - 1 + SWIDTH; j++) {
-         printf("-%3d", the_image[i][j]);
+         (void)printf("-%3d", the_image[i][j]);
       }
    }
 }
