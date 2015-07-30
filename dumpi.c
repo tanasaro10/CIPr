@@ -35,9 +35,9 @@ int main(int32_t argc, char_t *argv[]) {
    char_t    in_name[MAX_NAME_LENGTH];
    char_t    out_name[MAX_NAME_LENGTH];
    char_t    *line, buffer[10];
-   sint16_t   i, j;
-   sint32_t   height, width;
-   sint16_t   **the_image;
+   sint16_t  i, j;
+   sint32_t  height, width;
+   sint16_t  **the_image;
    errors    error_flag = NO_ERROR; 
    FILE      *out_file;
 

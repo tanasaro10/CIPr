@@ -13,18 +13,18 @@
    *
    *       External Calls:
    *          imageio.c
-   *             does_not_exist
-   *             get_image_size
-   *             read_image_array
-   *             write_image_array
-   *             free_image_array
-   *             create_allocate_tif_file
+   *             does not exist
+   *             get image size
+   *             read image array
+   *             write image array
+   *             free image array
+   *             create allocate tif file
    *
    *       Modifications:
-   *         27 September 1998 - created
-   *         27 July 2015 - refactored
-   *         28 July 2015 - refactored
-   *           Alexandra Bodirlau, Scoala de Vara - Thales - 2015
+   *         27 September 1998  created
+   *         27 July 2015  refactored
+   *         28 July 2015  refactored
+   *           Alexandra Bodirlau, Scoala de Vara  Thales  2015
    *
    *************************************************/
 
@@ -38,11 +38,9 @@ int main(int32_t argc, char_t *argv[]) {
   sint32_t           rows_number, columns_number;
   sint16_t           **the_image;
   tiff_header_struct image_header;
-  bmpfileheader      bmp_file_header;
-  bitmapheader       bmheader;
   errors             error_flag = NO_ERROR;
 
-  if(argc < PARAM_NUMBERS || argc > PARAM_NUMBERS){
+  if(argc < PARAM_NUMBER || argc > PARAM_NUMBER){
     printf("\nusage: bmp2tif bmp-file-name tif-file-name\n");
     error_flag = WRONG_NUMBER_OF_PARAMETERS;
   }

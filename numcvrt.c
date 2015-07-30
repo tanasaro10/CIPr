@@ -15,47 +15,45 @@
     *
     *  Modifications:
     *     12 May 1993 - recreated
+    *     28 July 2015 - created
+    *           Alexandra Bodirlau, Scoala de Vara - Thales - 2015
     *
     *******************************************/
 
 
+#include "mtypes.h"
+#include <stdio.h>
+#include <stdlib.h>
 
+#define STRING_LENGTH 80
 
-get_integer(n)
-   int *n;
-{
-   char string[80];
+void get_integer(sint16_t *n) {
+  char_t string[STRING_LENGTH];
 
-   gets(string);
-   *n = atoi(string);
+  gets(string);
+  *n = atoi(string);
 }
 
 
-get_short(n)
-   short *n;
-{
-   char string[80];
+void get_short(sint16_t *n) {
+  char_t string[STRING_LENGTH];
 
-   gets(string);
-   *n = atoi(string);
+  gets(string);
+  *n = atoi(string);
 }
 
 
-get_long(n)
-   long *n;
-{
-   char string[80];
+void get_long(sint32_t *n) {
+  char_t string[STRING_LENGTH];
 
-   gets(string);
-   *n = atol(string);
+  gets(string);
+  *n = atol(string);
 }
 
 
-get_float(f)
-   float *f;
-{
-   char string[80];
+void get_float(float *f) {
+  char_t string[STRING_LENGTH];
 
-   gets(string);
-   *f = atof(string);
+  gets(string);
+  *f = atof(string);
 }

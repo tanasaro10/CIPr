@@ -29,6 +29,7 @@
 #include "mtypes.h"
 #include "geosubs.h"
 
+
  /*******************************************
      *
      *   geometry(..
@@ -48,12 +49,12 @@
      *
      *******************************************/
 
-void geometry(int16_t **the_image, int16_t **out_image,
-        geometry_options image, int32_t rows, int32_t cols) {
+void geometry(sint16_t **the_image, sint16_t **out_image,
+        geometry_options image, sint32_t rows, sint32_t cols) {
 
-  double32_t cosa, sina, radian_angle, tmpx, tmpy;
-  float32_t  x_div, y_div, x_num, y_num;
-  int16_t    i, j, new_i, new_j;
+  double cosa, sina, radian_angle, tmpx, tmpy;
+  float  x_div, y_div, x_num, y_num;
+  sint16_t    i, j, new_i, new_j;
 
     /******************************
     *
@@ -62,7 +63,7 @@ void geometry(int16_t **the_image, int16_t **out_image,
     *
     *******************************/
 
-  radian_angle = (double32_t) image.x_angle / MAGIC_NUMBER;
+  radian_angle = (double) image.x_angle / MAGIC_NUMBER;
   cosa  = cos(radian_angle);
   sina  = sin(radian_angle);
 
@@ -79,7 +80,7 @@ void geometry(int16_t **the_image, int16_t **out_image,
     *
     *************************************/
 
-  if (image.x_stretch < 0.00001) {
+  if (image.x_stretch < EPSILON) {
     x_div = 1.0;
     x_num = 0.0;
   }
@@ -88,7 +89,7 @@ void geometry(int16_t **the_image, int16_t **out_image,
     x_num = 1.0;
   }
 
-  if (image.y_stretch < 0.00001) {
+  if (image.y_stretch < EPSILON) {
     y_div = 1.0;
     y_num = 0.0;
   }
@@ -104,27 +105,27 @@ void geometry(int16_t **the_image, int16_t **out_image,
   **************************/
   for (i = 0; i < rows; i++) {
     if ((i % 10) == 0) {
-      printf("%d ", i);
+      (void)printf("%d ", i);
     }
     for (j = 0; j < cols; j++) {
 
       tmpx = j * cosa + i * sina + image.x_displace +
-            (double32_t) x_num * j / x_div +
-            (double32_t) image.x_cross * i * j;
+            (double) x_num * j / x_div +
+            (double) image.x_cross * i * j;
 
       tmpy = i * cosa - j * sina + image.y_displace +
-            (double32_t) y_num * i / y_div +
-            (double32_t) image.y_cross * i * j;
+            (double) y_num * i / y_div +
+            (double) image.y_cross * i * j;
 
-      if (image.x_stretch != 0.0) {
+      if (abs(image.x_stretch) > EPSILON) {
         tmpx = tmpx - j * cosa + i * sina;
       }
-      if (image.y_stretch != 0.0) {
+      if (abs(image.y_stretch) > EPSILON) {
         tmpy = tmpy - i * cosa - j * sina;
       }
 
-      new_j = (int16_t) tmpx;
-      new_i = (int16_t) tmpy;
+      new_j = (sint16_t) tmpx;
+      new_i = (sint16_t) tmpy;
 
       if (image.bilinear == 0) {
         if ((new_j < 0) || (new_j >= cols) || (new_i < 0) || (new_i >= rows)) {
@@ -162,11 +163,11 @@ void geometry(int16_t **the_image, int16_t **out_image,
      *
      *******************************************/
 
-void arotate(int16_t **the_image, int16_t **out_image,
-            rotate_options image, int32_t rows, int32_t cols) {
+void arotate(sint16_t **the_image, sint16_t **out_image,
+            rotate_options image, sint32_t rows, sint32_t cols) {
 
-  double32_t cosa, sina, radian_angle, tmpx, tmpy;
-  int16_t    i, j, new_i, new_j;
+  double cosa, sina, radian_angle, tmpx, tmpy;
+  sint16_t    i, j, new_i, new_j;
 
   radian_angle = image.angle / MAGIC_NUMBER;
   cosa  = cos(radian_angle);
@@ -198,8 +199,8 @@ void arotate(int16_t **the_image, int16_t **out_image,
       tmpx = j * cosa - i * sina - image.m * cosa + image.m + image.n * sina;
       tmpy = i * cosa + j * sina - image.m * sina - image.n * cosa + image.n;
 
-      new_j = (int16_t) tmpx;
-      new_i = (int16_t) tmpy;
+      new_j = (sint16_t) tmpx;
+      new_i = (sint16_t) tmpy;
 
       if (image.bilinear == 0) {
         if ((new_j < 0) || (new_j >= cols) || (new_i < 0) || (new_i >= rows)) {
@@ -237,13 +238,13 @@ void arotate(int16_t **the_image, int16_t **out_image,
      *   the proper gray level.
      *
      *******************************************/
-int16_t bilinear_interpolate(int16_t **the_image, double32_t x, double32_t y,
-                          int32_t rows, int32_t cols) {
+int16_t bilinear_interpolate(sint16_t **the_image, double x, double y,
+                          sint32_t rows, sint32_t cols) {
    
-  double32_t fraction_x, fraction_y, one_minus_x, one_minus_y;
-  double32_t p1, p2;
-  int16_t    ceil_x, ceil_y, floor_x, floor_y;
-  int16_t    p3, result = FILL;
+  double      fraction_x, fraction_y, one_minus_x, one_minus_y;
+  double      pixel1, pixel2;
+  sint16_t    ceil_x, ceil_y, floor_x, floor_y;
+  sint16_t    pixel3, result = FILL;
 
       /******************************
       *
@@ -252,15 +253,15 @@ int16_t bilinear_interpolate(int16_t **the_image, double32_t x, double32_t y,
       *
       *******************************/
 
-  if ((x < 0.0) || (x >= (double32_t)(cols - 1)) || 
-    (y < 0.0) || (y >= (double32_t)(rows - 1))) {
-    p3 = result;
+  if ((x < EPSILON) || (x >= (double)(cols - 1)) || 
+    (y < EPSILON) || (y >= (double)(rows - 1))) {
+    pixel3 = result;
   }
   else {
-    floor_x    = (int16_t) floor(x);
-    floor_y    = (int16_t) floor(y);
-    ceil_x     = (int16_t) ceil(x);
-    ceil_y     = (int16_t) ceil(y);
+    floor_x    = (sint16_t) floor(x);
+    floor_y    = (sint16_t) floor(y);
+    ceil_x     = (sint16_t) ceil(x);
+    ceil_y     = (sint16_t) ceil(y);
 
     fraction_x = x - floor(x);
     fraction_y = y - floor(y);
@@ -268,17 +269,17 @@ int16_t bilinear_interpolate(int16_t **the_image, double32_t x, double32_t y,
     one_minus_x = 1.0 - fraction_x;
     one_minus_y = 1.0 - fraction_y;
 
-    p1 = one_minus_x * the_image[floor_y][floor_x] +
+    pixel1 = one_minus_x * the_image[floor_y][floor_x] +
         fraction_x * the_image[floor_y][ceil_x];
 
-    p2 = one_minus_x * the_image[ceil_y][floor_x] +
+    pixel2 = one_minus_x * the_image[ceil_y][floor_x] +
         fraction_x * the_image[ceil_y][ceil_x];
    
-    p3 = (int16_t) (one_minus_y * p1 + fraction_y * p2);
+    pixel3 = (sint16_t) (one_minus_y * pixel1 + fraction_y * pixel2);
    
   }
   
-  return p3;
+  return pixel3;
 }  /* ends bilinear_interpolate */
 
 
@@ -298,9 +299,9 @@ int16_t bilinear_interpolate(int16_t **the_image, double32_t x, double32_t y,
 void get_geometry_options(char_t operation[], geometry_options *image_geometry,
                           rotate_options *image_rotate) {
    
-  int16_t not_finished, response;
-  not_finished = 1;
-  while (not_finished){
+  uint16_t finished, response;
+  finished = 0;
+  while (!finished){
 
     printf("\nThe geomety options are:");
     printf("\n\t1. Operation is %s", operation);
@@ -322,7 +323,7 @@ void get_geometry_options(char_t operation[], geometry_options *image_geometry,
     get_integer(&response);
 
     if (response == 0) {
-      not_finished = 0;
+      finished = 1;
     }
 
     if (response == 1) {
